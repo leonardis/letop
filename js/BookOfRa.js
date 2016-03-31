@@ -23,6 +23,12 @@ var newCredits=0, oldCredits=0;
 var automatico = 0;
 var playing = false;
 
+var reelImage1 = ["img/BookOfRa/book.png","img/BookOfRa/1q.png","img/BookOfRa/a.png"];
+var reelImage2 = ["img/BookOfRa/esc.png","img/BookOfRa/q.png","img/BookOfRa/raa.png"];
+var reelImage3 = ["img/BookOfRa/indi.png","img/BookOfRa/far.png","img/BookOfRa/1q.png"];
+var reelImage4 = ["img/BookOfRa/a.png","img/BookOfRa/book.png","img/BookOfRa/k.png"];
+var reelImage5 = ["img/BookOfRa/far.png","img/BookOfRa/1q.png","img/BookOfRa/j.png"];
+
 var ak3x = parseInt($('#ak3x').text());
 var ak4x = parseInt($('#ak4x').text());
 var ak5x = parseInt($('#ak5x').text());
@@ -64,6 +70,7 @@ var itemRand=0;
 var controlImg = 0;
 
 var device = "";
+var myPercent = "";
 
 var valMatrix = [[0,0,0,0,0,0,0,0,0,0],//1Q
                [0,0,0,0,0,0,0,0,0,0],//A
@@ -91,27 +98,98 @@ var BLURB_TBL = [
 ];
 
 function noWinImages(){
-  var reelImage1 = ["img/BookOfRa/book.png","img/BookOfRa/1q.png","img/BookOfRa/a.png"];
-  var reelImage2 = ["img/BookOfRa/esc.png","img/BookOfRa/q.png","img/BookOfRa/raa.png"];
-  var reelImage3 = ["img/BookOfRa/indi.png","img/BookOfRa/far.png","img/BookOfRa/1q.png"];
-  var reelImage4 = ["img/BookOfRa/a.png","img/BookOfRa/book.png","img/BookOfRa/k.png"];
-  var reelImage5 = ["img/BookOfRa/far.png","img/BookOfRa/1q.png","img/BookOfRa/j.png"];
 
-  $('#noWin11').attr("src",reelImage1[1]);
-  $('#noWin21').attr("src",reelImage1[0]);
-  $('#noWin31').attr("src",reelImage1[2]);
-  $('#noWin12').attr("src",reelImage2[1]);
-  $('#noWin22').attr("src",reelImage2[0]);
-  $('#noWin32').attr("src",reelImage2[2]);
-  $('#noWin13').attr("src",reelImage3[1]);
-  $('#noWin23').attr("src",reelImage3[0]);
-  $('#noWin33').attr("src",reelImage3[2]);
-  $('#noWin14').attr("src",reelImage4[1]);
-  $('#noWin24').attr("src",reelImage4[0]);
-  $('#noWin34').attr("src",reelImage4[2]);
-  $('#noWin15').attr("src",reelImage5[1]);
-  $('#noWin25').attr("src",reelImage5[0]);
-  $('#noWin35').attr("src",reelImage5[2]);
+  var myRand = Math.floor(Math.random() * 5) + 1;
+
+  switch (myRand){
+    case 1:
+      $('#noWin11').attr("src",reelImage1[1]);
+      $('#noWin21').attr("src",reelImage1[0]);
+      $('#noWin31').attr("src",reelImage1[2]);
+      $('#noWin12').attr("src",reelImage2[1]);
+      $('#noWin22').attr("src",reelImage2[0]);
+      $('#noWin32').attr("src",reelImage2[2]);
+      $('#noWin13').attr("src",reelImage3[1]);
+      $('#noWin23').attr("src",reelImage3[0]);
+      $('#noWin33').attr("src",reelImage3[2]);
+      $('#noWin14').attr("src",reelImage4[1]);
+      $('#noWin24').attr("src",reelImage4[0]);
+      $('#noWin34').attr("src",reelImage4[2]);
+      $('#noWin15').attr("src",reelImage5[1]);
+      $('#noWin25').attr("src",reelImage5[0]);
+      $('#noWin35').attr("src",reelImage5[2]);
+    break;
+    case 2:
+      $('#noWin11').attr("src",reelImage2[1]);
+      $('#noWin21').attr("src",reelImage2[0]);
+      $('#noWin31').attr("src",reelImage2[2]);
+      $('#noWin12').attr("src",reelImage1[1]);
+      $('#noWin22').attr("src",reelImage1[0]);
+      $('#noWin32').attr("src",reelImage1[2]);
+      $('#noWin13').attr("src",reelImage5[1]);
+      $('#noWin23').attr("src",reelImage5[0]);
+      $('#noWin33').attr("src",reelImage5[2]);
+      $('#noWin14').attr("src",reelImage3[1]);
+      $('#noWin24').attr("src",reelImage3[0]);
+      $('#noWin34').attr("src",reelImage3[2]);
+      $('#noWin15').attr("src",reelImage4[1]);
+      $('#noWin25').attr("src",reelImage4[0]);
+      $('#noWin35').attr("src",reelImage4[2]);
+    break;
+    case 3:
+      $('#noWin11').attr("src",reelImage3[1]);
+      $('#noWin21').attr("src",reelImage3[0]);
+      $('#noWin31').attr("src",reelImage3[2]);
+      $('#noWin12').attr("src",reelImage4[1]);
+      $('#noWin22').attr("src",reelImage4[0]);
+      $('#noWin32').attr("src",reelImage4[2]);
+      $('#noWin13').attr("src",reelImage1[1]);
+      $('#noWin23').attr("src",reelImage1[0]);
+      $('#noWin33').attr("src",reelImage1[2]);
+      $('#noWin14').attr("src",reelImage5[1]);
+      $('#noWin24').attr("src",reelImage5[0]);
+      $('#noWin34').attr("src",reelImage5[2]);
+      $('#noWin15').attr("src",reelImage2[1]);
+      $('#noWin25').attr("src",reelImage2[0]);
+      $('#noWin35').attr("src",reelImage2[2]);
+    break;
+    case 4:
+      $('#noWin11').attr("src",reelImage2[1]);
+      $('#noWin21').attr("src",reelImage2[0]);
+      $('#noWin31').attr("src",reelImage2[2]);
+      $('#noWin12').attr("src",reelImage1[1]);
+      $('#noWin22').attr("src",reelImage1[0]);
+      $('#noWin32').attr("src",reelImage1[2]);
+      $('#noWin13').attr("src",reelImage3[1]);
+      $('#noWin23').attr("src",reelImage3[0]);
+      $('#noWin33').attr("src",reelImage3[2]);
+      $('#noWin14').attr("src",reelImage5[1]);
+      $('#noWin24').attr("src",reelImage5[0]);
+      $('#noWin34').attr("src",reelImage5[2]);
+      $('#noWin15').attr("src",reelImage4[1]);
+      $('#noWin25').attr("src",reelImage4[0]);
+      $('#noWin35').attr("src",reelImage4[2]);
+    break;
+    case 5:
+      $('#noWin11').attr("src",reelImage5[1]);
+      $('#noWin21').attr("src",reelImage5[0]);
+      $('#noWin31').attr("src",reelImage5[2]);
+      $('#noWin12').attr("src",reelImage4[1]);
+      $('#noWin22').attr("src",reelImage4[0]);
+      $('#noWin32').attr("src",reelImage4[2]);
+      $('#noWin13').attr("src",reelImage3[1]);
+      $('#noWin23').attr("src",reelImage3[0]);
+      $('#noWin33').attr("src",reelImage3[2]);
+      $('#noWin14').attr("src",reelImage2[1]);
+      $('#noWin24').attr("src",reelImage2[0]);
+      $('#noWin34').attr("src",reelImage2[2]);
+      $('#noWin15').attr("src",reelImage1[1]);
+      $('#noWin25').attr("src",reelImage1[0]);
+      $('#noWin35').attr("src",reelImage1[2]);
+    break;
+  }
+  
+  
 
   //$('div.noWin').children().css("visibility","visible");
   //$('div.reels').children().css("visibility","hidden");
@@ -599,12 +677,12 @@ function SlotGame(idUser) {
           user :userID,
           val  :ec
       };
-      $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+      $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
             //alert("Guardado exitoso");
             monto_max = data.monto_max;
             if (datos.val > monto_max) {
               alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-              $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+              $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                   window.history.back();
               }).fail(function () {
               });
@@ -976,14 +1054,14 @@ function SlotGame(idUser) {
             user :userID,
             val  :ec
         };
-        $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -1090,9 +1168,8 @@ function SlotGame(idUser) {
         if (creditos < apuesta) {
           $('#messages').text('Necesita tener más creditos para apostar');
         }else {
-          percent = (0.35 >= Math.random()) ? true: false;
-          console.log("PERCENT");
-          console.log(percent);
+          percent = (myPercent >= Math.random()) ? true: false;
+          noWinImages();
           $('.noWinImg1').css("visibility","hidden");
           $('#canvas1').css("visibility","visible");
           $('.noWinImg2').css("visibility","hidden");
@@ -1138,7 +1215,7 @@ function SlotGame(idUser) {
 
           newCredits=creditos
           $.ajax({
-            url: 'http://172.16.0.149:8000/setGame/'+oldCredits+'/'+newCredits+'/',
+            url: 'http://192.168.1.109:8000/setGame/'+oldCredits+'/'+newCredits+'/',
             dataType:'JSON',
             type: 'GET',
             header: {"Access-Control-Allow-Origin": "*"},
@@ -1168,14 +1245,14 @@ function SlotGame(idUser) {
             user :userID,
             val  :ec
         };
-        $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -1236,13 +1313,14 @@ function SlotGame(idUser) {
       
       setInterval(function(){
         $.ajax({
-          url: 'http://172.16.0.149:8000/getDevice',
+          url: 'http://192.168.1.109:8000/getDevice',
           dataType:'JSON',
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({"device":'a7a772'}),
           success:    function(data) {
             device = data.device;
+            myPercent = data.percent;
           }, error: function(jqXHR){
             alert("El dispositivo ya no se encuentra disponible para jugar!");
             window.history.back();
@@ -2177,7 +2255,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -2801,7 +2879,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -3425,7 +3503,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -4049,7 +4127,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -4673,7 +4751,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -5297,7 +5375,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -5921,7 +5999,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -6545,7 +6623,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -7169,7 +7247,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -7793,7 +7871,7 @@ Game.prototype.update = function() {
             ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
             linesToWin+=1;
             document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://172.16.0.149:8000/winJackpot", function (data){
+            $.get("http://192.168.1.109:8000/winJackpot", function (data){
                 //alert("Guardado exitoso");              
             }).fail(function() {
                 //alert("Error al guardar");
@@ -8103,7 +8181,7 @@ Game.prototype.update = function() {
   controlImg=0;
 
   if ((books==4) && !free) {
-    alert("Tiene 10 juegos gratis");
+    
     freeGames = 0;
     //$('div.win').children().css("visibility","hidden");
     //$('div#lines').children().css("visibility", "hidden");
@@ -8131,6 +8209,7 @@ Game.prototype.update = function() {
       imageRand = "a";
 
     console.log(imageRand);
+    alert("Tiene 10 juegos gratis y su imagen de bonus es: "+imageRand);
   }
 
   if (free) {
@@ -8165,6 +8244,7 @@ Game.prototype.update = function() {
       $('div#lines').children().css("visibility", "hidden");
       $('#sombra').css("visibility", "visible");
       if (percent) {
+        noWinImages();
         $('.noWinImg1').css("visibility","hidden");
         $('#canvas1').css("visibility","visible");
         $('.noWinImg2').css("visibility","hidden");
@@ -8234,14 +8314,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -8352,14 +8432,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -8470,14 +8550,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -8590,14 +8670,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -8710,14 +8790,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -8830,14 +8910,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -8950,14 +9030,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -9070,14 +9150,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -9190,14 +9270,14 @@ Game.prototype.update = function() {
                       user :userID,
                       val  :ec
                   };
-                  $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
                         //alert("Guardado exitoso");
                         monto_max = data.monto_max;
                         
 
                         if (datos.val > monto_max) {
                           alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                               window.history.back();
                           }).fail(function () {
                           });
@@ -9253,8 +9333,9 @@ Game.prototype.update = function() {
             }
             break;
         }
+      
+        $('#sombra').css("visibility", "hidden");
       }
-      $('#sombra').css("visibility", "hidden");
     }
     if (freeGames==9) {
       alert("Se terminaron los juegos gratis!");
@@ -9282,7 +9363,7 @@ Game.prototype.update = function() {
       $('#credits').text(ec);
       newCredits=ec;
       $.ajax({
-          url: 'http://172.16.0.149:8000/setGame/'+oldCredits+'/'+newCredits+'/',
+          url: 'http://192.168.1.109:8000/setGame/'+oldCredits+'/'+newCredits+'/',
           dataType:'JSON',
           type: 'GET',
           contentType: 'application/json',
@@ -9298,14 +9379,14 @@ Game.prototype.update = function() {
             user :userID,
             val  :ec
         };
-        $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -9334,7 +9415,7 @@ Game.prototype.update = function() {
 //        //        'message: ' + error.message + '\n');
         //}
 
-        percent = (0.35 >= Math.random()) ? true: false;
+        percent = (myPercent >= Math.random()) ? true: false;
         console.log("PERCENT");
         console.log(percent);
         $('.noWinImg1').css("visibility","hidden");
@@ -9395,14 +9476,14 @@ Game.prototype.update = function() {
             user :userID,
             val  :ec
         };
-        $.get("http://172.16.0.149:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://172.16.0.149:8000/close_sesion/" + device +"/", function () {
+                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
