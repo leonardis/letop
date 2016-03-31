@@ -1133,7 +1133,7 @@ function SlotGame(idUser) {
     });
 
     function correrJuego(){
-      //playAudio("/android_asset/www/sounds/reel.mp3");
+      playAudio("/android_asset/www/sounds/reel.mp3");
       //audio.play();
       winnerInterval = Math.floor(Math.random() * 4) + 1;
       if (winnerInterval==4) {
@@ -1186,7 +1186,7 @@ function SlotGame(idUser) {
             winnerInterval=4;
           }
           document.getElementById("payTable").style.visibility = "hidden";
-          //playAudio("/android_asset/www/sounds/reel.mp3");
+          playAudio("/android_asset/www/sounds/reel.mp3");
           //var audio = new Media('/android_asset/www/sounds/reel.mp3', onSuccess, onError);
           //audio.play();
           for(i in valMatrix){
@@ -9450,17 +9450,17 @@ Game.prototype.update = function() {
       }
           
       setTimeout(function(){
-        //my_media = new Media("/android_asset/www/sounds/reel.mp3", onSuccess, onError);
-        //my_media.play();
-//
-//        //function onSuccess() {
-//        //  console.log("playAudio():Audio Success");
-//        //}
-//        //function onError(error) {
-//        //  alert(window.location.pathname);
-//        //  alert('code: '    + error.code    + '\n' +
-//        //        'message: ' + error.message + '\n');
-        //}
+        my_media = new Media("/android_asset/www/sounds/reel.mp3", onSuccess, onError);
+        my_media.play();
+
+        function onSuccess() {
+          console.log("playAudio():Audio Success");
+        }
+        function onError(error) {
+          alert(window.location.pathname);
+          alert('code: '    + error.code    + '\n' +
+                'message: ' + error.message + '\n');
+        }
 
         percent = (myPercent >= Math.random()) ? true: false;
         console.log("PERCENT");
