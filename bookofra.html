@@ -614,7 +614,7 @@
       $('#setId').click(function() {
         user = $('#usuario').val();
         console.log("MYUSR"+user);
-          var url = 'http://192.168.1.109:8000/myuser/'+user+'/';
+          var url = 'http://casino.local/myuser/'+user+'/';
           //$("#overlay2").fadeOut(1500);
           $.ajax({
               url:url,
@@ -653,11 +653,11 @@
 
           miid = window.localStorage.getItem("idDevice");
           $.ajax({
-            url: "http://192.168.1.109:8000/getDevice",
+            url: "http://casino.local/getDevice",
             type: 'POST',
             dataType: 'JSON',
             contentType: 'application/json',
-            data: JSON.stringify({"device":'a7a772'}),
+            data: JSON.stringify({"device":miid}),
             success: function(data){
               $('#credits').text(data.credits);
               $("#overlay2").fadeOut(1500);
@@ -667,7 +667,7 @@
             }
           });
 
-          /*var url = 'http://192.168.1.109:8000/myuser/'+$('#userid').val()+'/';
+          /*var url = 'http://casino.local/myuser/'+$('#userid').val()+'/';
           //$("#overlay2").fadeOut(1500);
           $.ajax({
               url:url,
@@ -692,11 +692,11 @@
     var miid = window.localStorage.getItem("idDevice");
     var idUser = ""
     $.ajax({
-      url: "http://192.168.1.109:8000/getDevice",
+      url: "http://casino.local/getDevice",
       type: 'POST',
       dataType: 'JSON',
       contentType: 'application/json',
-      data: JSON.stringify({"device":'a7a772'}),
+      data: JSON.stringify({"device":miid}),
       success: function(data){
         idUser = data.user;
         $(function() { SlotGame(idUser); });

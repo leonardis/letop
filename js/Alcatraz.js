@@ -677,12 +677,12 @@ function SlotGame(idUser) {
           user :userID,
           val  :ec
       };
-      $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+      $.get("http://casino.local/save_credits/"+datos.user+"/"+datos.val, function (data){
             //alert("Guardado exitoso");
             monto_max = data.monto_max;
             if (datos.val > monto_max) {
               alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-              $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
+              $.get("http://casino.local/close_sesion/" + device +"/", function () {
                   window.history.back();
               }).fail(function () {
               });
@@ -1054,14 +1054,14 @@ function SlotGame(idUser) {
             user :userID,
             val  :ec
         };
-        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://casino.local/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
+                $.get("http://casino.local/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -1215,7 +1215,7 @@ function SlotGame(idUser) {
 
           newCredits=creditos
           $.ajax({
-            url: 'http://192.168.1.109:8000/setGame/'+oldCredits+'/'+newCredits+'/',
+            url: 'http://casino.local/setGame/'+oldCredits+'/'+newCredits+'/',
             dataType:'JSON',
             type: 'GET',
             header: {"Access-Control-Allow-Origin": "*"},
@@ -1245,14 +1245,14 @@ function SlotGame(idUser) {
             user :userID,
             val  :ec
         };
-        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://casino.local/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
+                $.get("http://casino.local/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -1313,11 +1313,11 @@ function SlotGame(idUser) {
       
       setInterval(function(){
         $.ajax({
-          url: 'http://192.168.1.109:8000/getDevice',
+          url: 'http://casino.local/getDevice',
           dataType:'JSON',
           type: 'POST',
           contentType: 'application/json',
-          data: JSON.stringify({"device":'a7a772'}),
+          data: JSON.stringify({"device":miid}),
           success:    function(data) {
             device = data.device;
             myPercent = data.percent;
@@ -1819,7532 +1819,7579 @@ Game.prototype.update = function() {
 
 
     switch (this.state) {
-    case 1: // all slots spinning
-  if (now - this.lastUpdate > RUNTIME) {
-      this.state = 2;
-      this.lastUpdate = now;
-  }
-  break;
-    case 2: // slot 1
-  this.stopped1 = _check_slot( this.offset1, this.result1 );
-  if ( this.stopped1 ) {
-      this.speed1 = 0;
-      this.state++;
-      this.lastUpdate = now;
-      if (!percent) {
-        $('img.noWinImg1').css("visibility","visible");
-        $('#canvas1').css("visibility","hidden");
-      }
-      
-
-  }
-  break;
-    case 3: // slot 1 stopped, slot 2
-  this.stopped2 = _check_slot( this.offset2, this.result2 );
-  if ( this.stopped2 ) {
-      this.speed2 = 0;
-      this.state++;
-      this.lastUpdate = now;
-      if (!percent) {
-        $('img.noWinImg2').css("visibility","visible");
-        $('#canvas2').css("visibility","hidden");
-      }
-  }
-  break;
-    case 4: // slot 2 stopped, slot 3
-  this.stopped3 = _check_slot( this.offset3, this.result3 );
-  if ( this.stopped3 ) {
-      this.speed3 = 0;
-      this.state++;
-      this.lastUpdate = now;
-      if (!percent) {
-        $('img.noWinImg3').css("visibility","visible");
-        $('#canvas3').css("visibility","hidden");
-      }
-  }
-  break;
-  case 5: // slot 2 stopped, slot 3
-  this.stopped4 = _check_slot( this.offset4, this.result4 );
-  if ( this.stopped4 ) {
-      this.speed4 = 0;
-      this.state++;
-      this.lastupdate = now;
-      if (!percent) {
-        $('img.noWinImg4').css("visibility","visible");
-        $('#canvas4').css("visibility","hidden");
-      }
-  }
-  break;
-  case 6: // slot 2 stopped, slot 3
-  this.stopped5 = _check_slot( this.offset5, this.result5 );
-  if ( this.stopped5 ) {
-      this.speed5 = 0;
-      this.state++;
-      if (!percent) {
-        $('img.noWinImg5').css("visibility","visible");
-        $('#canvas5').css("visibility","hidden");
-      }
-      console.log(that.items1[that.result1].id, that.items2[that.result2].id, that.items3[that.result3].id, that.items4[that.result4].id, that.items5[that.result5].id);
-  }
-  break;
-    case 7: // slots stopped 
-  if ( now - this.lastUpdate > 1000 ) {
-    $('div.button').prop('disabled', false);
-      $('div.button.others').addClass("button-default");
-      $('div.button.others').removeClass("button-disable");
-      if ($('#lineas').text() == 1) {
-        $('#lineMinus').addClass("button-disable");
-        $('#lineMinus').removeClass("button-default");
-      }else if ($('#lineas').text() == 10) {
-        $('#lineMore').addClass("button-disable");
-        $('#lineMore').removeClass("button-default");
-      };
-
-      if ($('#bet').text() == 1) {
-        $('#betMinus').addClass("button-disable");
-        $('#betMinus').removeClass("button-default");
-      }else if ($('#bet').text() == 200) {
-        $('#betMore').addClass("button-disable");
-        $('#betMore').removeClass("button-default");
-      };
-
-      this.state = 8;
-  }
-  break;
-    case 8: // check results
-  
-
-    if (percent) {
-        
-      for (var i = 1; i<= $('#lineas').text(); i++){
-        if (i==1 && linesToWin<=3){
-          if (that.items1[that.result1].id == '1q') 
-            valMatrix[0][0] += 1;
-          if (that.items2[that.result2].id == '1q') 
-            valMatrix[0][0] += 1;
-          if (that.items3[that.result3].id == '1q') 
-            valMatrix[0][0] += 1;
-          if (that.items4[that.result4].id == '1q') 
-            valMatrix[0][0] += 1;
-          if (that.items5[that.result5].id == '1q') 
-            valMatrix[0][0] += 1;
-
-          if (valMatrix[0][0] == 3) {
-            if (that.items1[that.result1].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result5].id == '1q') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][0] == 4) {
-            if (that.items1[that.result1].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result5].id == '1q') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+      case 1: // all slots spinning
+        if (now - this.lastUpdate > RUNTIME) {
+          this.state = 2;
+          this.lastUpdate = now;
+        }
+        break;
+      case 2: // slot 1
+        this.stopped1 = _check_slot(this.offset1, this.result1);
+        if (this.stopped1) {
+          this.speed1 = 0;
+          this.state++;
+          this.lastUpdate = now;
+          if (!percent) {
+            $('img.noWinImg1').css("visibility", "visible");
+            $('#canvas1').css("visibility", "hidden");
           }
 
-          if (that.items1[that.result1].id == 'a') 
-            valMatrix[1][0] += 1;
-          if (that.items2[that.result2].id == 'a') 
-            valMatrix[1][0] += 1;
-          if (that.items3[that.result3].id == 'a') 
-            valMatrix[1][0] += 1;
-          if (that.items4[that.result4].id == 'a') 
-            valMatrix[1][0] += 1;
-          if (that.items5[that.result5].id == 'a') 
-            valMatrix[1][0] += 1;
 
-
-          if (valMatrix[1][0] == 3) {
-            if (that.items1[that.result1].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result5].id == 'a') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][0] == 4) {
-            if (that.items1[that.result1].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result5].id == 'a') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-              document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+        }
+        break;
+      case 3: // slot 1 stopped, slot 2
+        this.stopped2 = _check_slot(this.offset2, this.result2);
+        if (this.stopped2) {
+          this.speed2 = 0;
+          this.state++;
+          this.lastUpdate = now;
+          if (!percent) {
+            $('img.noWinImg2').css("visibility", "visible");
+            $('#canvas2').css("visibility", "hidden");
           }
-
-          if (that.items1[that.result1].id == 'k') 
-            valMatrix[2][0] += 1;
-          if (that.items2[that.result2].id == 'k') 
-            valMatrix[2][0] += 1;
-          if (that.items3[that.result3].id == 'k') 
-            valMatrix[2][0] += 1;
-          if (that.items4[that.result4].id == 'k') 
-            valMatrix[2][0] += 1;
-          if (that.items5[that.result5].id == 'k') 
-            valMatrix[2][0] += 1;
-
-
-          if (valMatrix[2][0] == 3) {
-            if (that.items1[that.result1].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result5].id == 'k') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][0] == 4) {
-            if (that.items1[that.result1].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result5].id == 'k') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+        }
+        break;
+      case 4: // slot 2 stopped, slot 3
+        this.stopped3 = _check_slot(this.offset3, this.result3);
+        if (this.stopped3) {
+          this.speed3 = 0;
+          this.state++;
+          this.lastUpdate = now;
+          if (!percent) {
+            $('img.noWinImg3').css("visibility", "visible");
+            $('#canvas3').css("visibility", "hidden");
           }
-
-          if (that.items1[that.result1].id == 'q') 
-            valMatrix[3][0] += 1;
-          if (that.items2[that.result2].id == 'q') 
-            valMatrix[3][0] += 1;
-          if (that.items3[that.result3].id == 'q') 
-            valMatrix[3][0] += 1;
-          if (that.items4[that.result4].id == 'q') 
-            valMatrix[3][0] += 1;
-          if (that.items5[that.result5].id == 'q') 
-            valMatrix[3][0] += 1;
-
-          if (valMatrix[3][0] == 3) {
-            if (that.items1[that.result1].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result5].id == 'q') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][0] == 4) {
-            if (that.items1[that.result1].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result5].id == 'q') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+        }
+        break;
+      case 5: // slot 2 stopped, slot 3
+        this.stopped4 = _check_slot(this.offset4, this.result4);
+        if (this.stopped4) {
+          this.speed4 = 0;
+          this.state++;
+          this.lastupdate = now;
+          if (!percent) {
+            $('img.noWinImg4').css("visibility", "visible");
+            $('#canvas4').css("visibility", "hidden");
           }
-
-          if (that.items1[that.result1].id == 'j') 
-            valMatrix[4][0] += 1;
-          if (that.items2[that.result2].id == 'j') 
-            valMatrix[4][0] += 1;
-          if (that.items3[that.result3].id == 'j') 
-            valMatrix[4][0] += 1;
-          if (that.items4[that.result4].id == 'j') 
-            valMatrix[4][0] += 1;
-          if (that.items5[that.result5].id == 'j') 
-            valMatrix[4][0] += 1;
-
-          if (valMatrix[4][0] == 3) {
-            if (that.items1[that.result1].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result5].id == 'j') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][0] == 4) {
-            if (that.items1[that.result1].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result5].id == 'j') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+        }
+        break;
+      case 6: // slot 2 stopped, slot 3
+        this.stopped5 = _check_slot(this.offset5, this.result5);
+        if (this.stopped5) {
+          this.speed5 = 0;
+          this.state++;
+          if (!percent) {
+            $('img.noWinImg5').css("visibility", "visible");
+            $('#canvas5').css("visibility", "hidden");
           }
-
-          if (that.items1[that.result1].id == 'book') 
-            valMatrix[5][0] += 1;
-          if (that.items2[that.result2].id == 'book') 
-            valMatrix[5][0] += 1;
-          if (that.items3[that.result3].id == 'book') 
-            valMatrix[5][0] += 1;
-          if (that.items4[that.result4].id == 'book') 
-            valMatrix[5][0] += 1;
-          if (that.items5[that.result5].id == 'book') 
-            valMatrix[5][0] += 1;
-
-          if (valMatrix[5][0] == 3) {
-            if (that.items1[that.result1].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result5].id == 'book') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][0] == 4) {
-            if (that.items1[that.result1].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result5].id == 'book') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
+          console.log(that.items1[that.result1].id, that.items2[that.result2].id, that.items3[that.result3].id, that.items4[that.result4].id, that.items5[that.result5].id);
+        }
+        break;
+      case 7: // slots stopped 
+        if (now - this.lastUpdate > 1000) {
+          $('div.button').prop('disabled', false);
+          $('div.button.others').addClass("button-default");
+          $('div.button.others').removeClass("button-disable");
+          if ($('#lineas').text() == 1) {
+            $('#lineMinus').addClass("button-disable");
+            $('#lineMinus').removeClass("button-default");
+          } else if ($('#lineas').text() == 10) {
+            $('#lineMore').addClass("button-disable");
+            $('#lineMore').removeClass("button-default");
           }
+          ;
 
-          if (that.items1[that.result1].id == 'raa') 
-            valMatrix[6][0] += 1;
-          if (that.items2[that.result2].id == 'raa') 
-            valMatrix[6][0] += 1;
-          if (that.items3[that.result3].id == 'raa') 
-            valMatrix[6][0] += 1;
-          if (that.items4[that.result4].id == 'raa') 
-            valMatrix[6][0] += 1;
-          if (that.items5[that.result5].id == 'raa') 
-            valMatrix[6][0] += 1;
-
-          if (valMatrix[6][0] == 2) {          
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result2].id == 'raa'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][0] == 3) {
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][0] == 4) {
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+          if ($('#bet').text() == 1) {
+            $('#betMinus').addClass("button-disable");
+            $('#betMinus').removeClass("button-default");
+          } else if ($('#bet').text() == 200) {
+            $('#betMore').addClass("button-disable");
+            $('#betMore').removeClass("button-default");
           }
+          ;
 
-          if (that.items1[that.result1].id == 'esc') 
-            valMatrix[7][0] += 1;
-          if (that.items2[that.result2].id == 'esc') 
-            valMatrix[7][0] += 1;
-          if (that.items3[that.result3].id == 'esc') 
-            valMatrix[7][0] += 1;
-          if (that.items4[that.result4].id == 'esc') 
-            valMatrix[7][0] += 1;
-          if (that.items5[that.result5].id == 'esc') 
-            valMatrix[7][0] += 1;
-
-          if (valMatrix[7][0] == 2) {          
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result2].id == 'esc'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][0] == 3) {
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][0] == 4) {
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'far') 
-            valMatrix[8][0] += 1;
-          if (that.items2[that.result2].id == 'far') 
-            valMatrix[8][0] += 1;
-          if (that.items3[that.result3].id == 'far') 
-            valMatrix[8][0] += 1;
-          if (that.items4[that.result4].id == 'far') 
-            valMatrix[8][0] += 1;
-          if (that.items5[that.result5].id == 'far') 
-            valMatrix[8][0] += 1;
-
-          if (valMatrix[8][0] == 2) {          
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result2].id == 'far'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][0] == 3) {
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][0] == 4) {
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'indi') 
-            valMatrix[9][0] += 1;
-          if (that.items2[that.result2].id == 'indi') 
-            valMatrix[9][0] += 1;
-          if (that.items3[that.result3].id == 'indi') 
-            valMatrix[9][0] += 1;
-          if (that.items4[that.result4].id == 'indi') 
-            valMatrix[9][0] += 1;
-          if (that.items5[that.result5].id == 'indi') 
-            valMatrix[9][0] += 1;
-
-          if (valMatrix[9][0] == 2) {          
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result2].id == 'indi'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][0] == 3) {
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][0] == 4) {
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi'){
-              document.getElementById("win11").style.visibility = "visible";
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win12").style.visibility = "visible";
-              document.getElementById("win13").style.visibility = "visible";
-              document.getElementById("win14").style.visibility = "visible";
-              document.getElementById("win15").style.visibility = "visible";
-              document.getElementById("uno").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][0] == 5){
-            document.getElementById("uno").style.visibility = "visible";
-            document.getElementById("win11").style.visibility = "visible";
-            document.getElementById("win12").style.visibility = "visible";
-            document.getElementById("win13").style.visibility = "visible";
-            document.getElementById("win14").style.visibility = "visible";
-            document.getElementById("win15").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==2 && linesToWin<=3){
-          if (that.items1[that.result10].id == '1q') 
-            valMatrix[0][1] += 1;
-          if (that.items2[that.result20].id == '1q') 
-            valMatrix[0][1] += 1;
-          if (that.items3[that.result30].id == '1q') 
-            valMatrix[0][1] += 1;
-          if (that.items4[that.result40].id == '1q') 
-            valMatrix[0][1] += 1;
-          if (that.items5[that.result50].id == '1q') 
-            valMatrix[0][1] += 1;
-
-          if (valMatrix[0][1] == 3) {
-            if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][1] == 4) {
-            if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'a') 
-            valMatrix[1][1] += 1;
-          if (that.items2[that.result20].id == 'a') 
-            valMatrix[1][1] += 1;
-          if (that.items3[that.result30].id == 'a') 
-            valMatrix[1][1] += 1;
-          if (that.items4[that.result40].id == 'a') 
-            valMatrix[1][1] += 1;
-          if (that.items5[that.result50].id == 'a') 
-            valMatrix[1][1] += 1;
+          this.state = 8;
+        }
+        break;
+      case 8: // check results
 
 
-          if (valMatrix[1][1] == 3) {
-            if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][1] == 4) {
-            if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-              document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+        if (percent) {
 
-          if (that.items1[that.result10].id == 'k') 
-            valMatrix[2][1] += 1;
-          if (that.items2[that.result20].id == 'k') 
-            valMatrix[2][1] += 1;
-          if (that.items3[that.result30].id == 'k') 
-            valMatrix[2][1] += 1;
-          if (that.items4[that.result40].id == 'k') 
-            valMatrix[2][1] += 1;
-          if (that.items5[that.result50].id == 'k') 
-            valMatrix[2][1] += 1;
+          for (var i = 1; i <= $('#lineas').text(); i++) {
+            if (i == 1 && linesToWin <= 3) {
+              if (that.items1[that.result1].id == '1q')
+                valMatrix[0][0] += 1;
+              if (that.items2[that.result2].id == '1q')
+                valMatrix[0][0] += 1;
+              if (that.items3[that.result3].id == '1q')
+                valMatrix[0][0] += 1;
+              if (that.items4[that.result4].id == '1q')
+                valMatrix[0][0] += 1;
+              if (that.items5[that.result5].id == '1q')
+                valMatrix[0][0] += 1;
+
+              if (valMatrix[0][0] == 3) {
+                if (that.items1[that.result1].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result5].id == '1q') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][0] == 4) {
+                if (that.items1[that.result1].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result5].id == '1q') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'a')
+                valMatrix[1][0] += 1;
+              if (that.items2[that.result2].id == 'a')
+                valMatrix[1][0] += 1;
+              if (that.items3[that.result3].id == 'a')
+                valMatrix[1][0] += 1;
+              if (that.items4[that.result4].id == 'a')
+                valMatrix[1][0] += 1;
+              if (that.items5[that.result5].id == 'a')
+                valMatrix[1][0] += 1;
 
 
-          if (valMatrix[2][1] == 3) {
-            if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][1] == 4) {
-            if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
+              if (valMatrix[1][0] == 3) {
+                if (that.items1[that.result1].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result5].id == 'a') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][0] == 4) {
+                if (that.items1[that.result1].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result5].id == 'a') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'k')
+                valMatrix[2][0] += 1;
+              if (that.items2[that.result2].id == 'k')
+                valMatrix[2][0] += 1;
+              if (that.items3[that.result3].id == 'k')
+                valMatrix[2][0] += 1;
+              if (that.items4[that.result4].id == 'k')
+                valMatrix[2][0] += 1;
+              if (that.items5[that.result5].id == 'k')
+                valMatrix[2][0] += 1;
+
+
+              if (valMatrix[2][0] == 3) {
+                if (that.items1[that.result1].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result5].id == 'k') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][0] == 4) {
+                if (that.items1[that.result1].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result5].id == 'k') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'q')
+                valMatrix[3][0] += 1;
+              if (that.items2[that.result2].id == 'q')
+                valMatrix[3][0] += 1;
+              if (that.items3[that.result3].id == 'q')
+                valMatrix[3][0] += 1;
+              if (that.items4[that.result4].id == 'q')
+                valMatrix[3][0] += 1;
+              if (that.items5[that.result5].id == 'q')
+                valMatrix[3][0] += 1;
+
+              if (valMatrix[3][0] == 3) {
+                if (that.items1[that.result1].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result5].id == 'q') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][0] == 4) {
+                if (that.items1[that.result1].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result5].id == 'q') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'j')
+                valMatrix[4][0] += 1;
+              if (that.items2[that.result2].id == 'j')
+                valMatrix[4][0] += 1;
+              if (that.items3[that.result3].id == 'j')
+                valMatrix[4][0] += 1;
+              if (that.items4[that.result4].id == 'j')
+                valMatrix[4][0] += 1;
+              if (that.items5[that.result5].id == 'j')
+                valMatrix[4][0] += 1;
+
+              if (valMatrix[4][0] == 3) {
+                if (that.items1[that.result1].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result5].id == 'j') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][0] == 4) {
+                if (that.items1[that.result1].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result5].id == 'j') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'book')
+                valMatrix[5][0] += 1;
+              if (that.items2[that.result2].id == 'book')
+                valMatrix[5][0] += 1;
+              if (that.items3[that.result3].id == 'book')
+                valMatrix[5][0] += 1;
+              if (that.items4[that.result4].id == 'book')
+                valMatrix[5][0] += 1;
+              if (that.items5[that.result5].id == 'book')
+                valMatrix[5][0] += 1;
+
+              if (valMatrix[5][0] == 3) {
+                if (that.items1[that.result1].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result5].id == 'book') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][0] == 4) {
+                if (that.items1[that.result1].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result5].id == 'book') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result1].id == 'raa')
+                valMatrix[6][0] += 1;
+              if (that.items2[that.result2].id == 'raa')
+                valMatrix[6][0] += 1;
+              if (that.items3[that.result3].id == 'raa')
+                valMatrix[6][0] += 1;
+              if (that.items4[that.result4].id == 'raa')
+                valMatrix[6][0] += 1;
+              if (that.items5[that.result5].id == 'raa')
+                valMatrix[6][0] += 1;
+
+              if (valMatrix[6][0] == 2) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result2].id == 'raa') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][0] == 3) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][0] == 4) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'esc')
+                valMatrix[7][0] += 1;
+              if (that.items2[that.result2].id == 'esc')
+                valMatrix[7][0] += 1;
+              if (that.items3[that.result3].id == 'esc')
+                valMatrix[7][0] += 1;
+              if (that.items4[that.result4].id == 'esc')
+                valMatrix[7][0] += 1;
+              if (that.items5[that.result5].id == 'esc')
+                valMatrix[7][0] += 1;
+
+              if (valMatrix[7][0] == 2) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result2].id == 'esc') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][0] == 3) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][0] == 4) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'far')
+                valMatrix[8][0] += 1;
+              if (that.items2[that.result2].id == 'far')
+                valMatrix[8][0] += 1;
+              if (that.items3[that.result3].id == 'far')
+                valMatrix[8][0] += 1;
+              if (that.items4[that.result4].id == 'far')
+                valMatrix[8][0] += 1;
+              if (that.items5[that.result5].id == 'far')
+                valMatrix[8][0] += 1;
+
+              if (valMatrix[8][0] == 2) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result2].id == 'far') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][0] == 3) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][0] == 4) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'indi')
+                valMatrix[9][0] += 1;
+              if (that.items2[that.result2].id == 'indi')
+                valMatrix[9][0] += 1;
+              if (that.items3[that.result3].id == 'indi')
+                valMatrix[9][0] += 1;
+              if (that.items4[that.result4].id == 'indi')
+                valMatrix[9][0] += 1;
+              if (that.items5[that.result5].id == 'indi')
+                valMatrix[9][0] += 1;
+
+              if (valMatrix[9][0] == 2) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result2].id == 'indi') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][0] == 3) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][0] == 4) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi') {
+                  document.getElementById("win11").style.visibility = "visible";
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win12").style.visibility = "visible";
+                  document.getElementById("win13").style.visibility = "visible";
+                  document.getElementById("win14").style.visibility = "visible";
+                  document.getElementById("win15").style.visibility = "visible";
+                  document.getElementById("uno").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][0] == 5) {
+                document.getElementById("uno").style.visibility = "visible";
+                document.getElementById("win11").style.visibility = "visible";
+                document.getElementById("win12").style.visibility = "visible";
+                document.getElementById("win13").style.visibility = "visible";
+                document.getElementById("win14").style.visibility = "visible";
+                document.getElementById("win15").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 2 && linesToWin <= 3) {
+              if (that.items1[that.result10].id == '1q')
+                valMatrix[0][1] += 1;
+              if (that.items2[that.result20].id == '1q')
+                valMatrix[0][1] += 1;
+              if (that.items3[that.result30].id == '1q')
+                valMatrix[0][1] += 1;
+              if (that.items4[that.result40].id == '1q')
+                valMatrix[0][1] += 1;
+              if (that.items5[that.result50].id == '1q')
+                valMatrix[0][1] += 1;
+
+              if (valMatrix[0][1] == 3) {
+                if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][1] == 4) {
+                if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
                 document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result10].id == 'q') 
-            valMatrix[3][1] += 1;
-          if (that.items2[that.result20].id == 'q') 
-            valMatrix[3][1] += 1;
-          if (that.items3[that.result30].id == 'q') 
-            valMatrix[3][1] += 1;
-          if (that.items4[that.result40].id == 'q') 
-            valMatrix[3][1] += 1;
-          if (that.items5[that.result50].id == 'q') 
-            valMatrix[3][1] += 1;
-
-          if (valMatrix[3][1] == 3) {
-            if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][1] == 4) {
-            if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'j') 
-            valMatrix[4][1] += 1;
-          if (that.items2[that.result20].id == 'j') 
-            valMatrix[4][1] += 1;
-          if (that.items3[that.result30].id == 'j') 
-            valMatrix[4][1] += 1;
-          if (that.items4[that.result40].id == 'j') 
-            valMatrix[4][1] += 1;
-          if (that.items5[that.result50].id == 'j') 
-            valMatrix[4][1] += 1;
-
-          if (valMatrix[4][1] == 3) {
-            if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][1] == 4) {
-            if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'book') 
-            valMatrix[5][1] += 1;
-          if (that.items2[that.result20].id == 'book') 
-            valMatrix[5][1] += 1;
-          if (that.items3[that.result30].id == 'book') 
-            valMatrix[5][1] += 1;
-          if (that.items4[that.result40].id == 'book') 
-            valMatrix[5][1] += 1;
-          if (that.items5[that.result50].id == 'book') 
-            valMatrix[5][1] += 1;
-
-          if (valMatrix[5][1] == 3) {
-            if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][1] == 4) {
-            if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result10].id == 'raa') 
-            valMatrix[6][1] += 1;
-          if (that.items2[that.result20].id == 'raa') 
-            valMatrix[6][1] += 1;
-          if (that.items3[that.result30].id == 'raa') 
-            valMatrix[6][1] += 1;
-          if (that.items4[that.result40].id == 'raa') 
-            valMatrix[6][1] += 1;
-          if (that.items5[that.result50].id == 'raa') 
-            valMatrix[6][1] += 1;
-
-          if (valMatrix[6][1] == 2) {          
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][1] == 3) {
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][1] == 4) {
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'esc') 
-            valMatrix[7][1] += 1;
-          if (that.items2[that.result20].id == 'esc') 
-            valMatrix[7][1] += 1;
-          if (that.items3[that.result30].id == 'esc') 
-            valMatrix[7][1] += 1;
-          if (that.items4[that.result40].id == 'esc') 
-            valMatrix[7][1] += 1;
-          if (that.items5[that.result50].id == 'esc') 
-            valMatrix[7][1] += 1;
-
-          if (valMatrix[7][1] == 2) {          
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][1] == 3) {
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][1] == 4) {
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'far') 
-            valMatrix[8][1] += 1;
-          if (that.items2[that.result20].id == 'far') 
-            valMatrix[8][1] += 1;
-          if (that.items3[that.result30].id == 'far') 
-            valMatrix[8][1] += 1;
-          if (that.items4[that.result40].id == 'far') 
-            valMatrix[8][1] += 1;
-          if (that.items5[that.result50].id == 'far') 
-            valMatrix[8][1] += 1;
-
-          if (valMatrix[8][1] == 2) {          
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][1] == 3) {
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][1] == 4) {
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'indi') 
-            valMatrix[9][1] += 1;
-          if (that.items2[that.result20].id == 'indi') 
-            valMatrix[9][1] += 1;
-          if (that.items3[that.result30].id == 'indi') 
-            valMatrix[9][1] += 1;
-          if (that.items4[that.result40].id == 'indi') 
-            valMatrix[9][1] += 1;
-          if (that.items5[that.result50].id == 'indi') 
-            valMatrix[9][1] += 1;
-
-          if (valMatrix[9][1] == 2) {          
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][1] == 3) {
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][1] == 4) {
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi'){
-              document.getElementById("win21").style.visibility = "visible";
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win22").style.visibility = "visible";
-              document.getElementById("win23").style.visibility = "visible";
-              document.getElementById("win24").style.visibility = "visible";
-              document.getElementById("win25").style.visibility = "visible";
-              document.getElementById("dos").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][1] == 5){
-            document.getElementById("dos").style.visibility = "visible";
-            document.getElementById("win21").style.visibility = "visible";
-            document.getElementById("win22").style.visibility = "visible";
-            document.getElementById("win23").style.visibility = "visible";
-            document.getElementById("win24").style.visibility = "visible";
-            document.getElementById("win25").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==3 && linesToWin<=3){
-          if (that.items1[that.result13].id == '1q') 
-            valMatrix[0][2] += 1;
-          if (that.items2[that.result23].id == '1q') 
-            valMatrix[0][2] += 1;
-          if (that.items3[that.result33].id == '1q') 
-            valMatrix[0][2] += 1;
-          if (that.items4[that.result43].id == '1q') 
-            valMatrix[0][2] += 1;
-          if (that.items5[that.result53].id == '1q') 
-            valMatrix[0][2] += 1;
-
-          if (valMatrix[0][2] == 3) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][2] == 4) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'a') 
-            valMatrix[1][2] += 1;
-          if (that.items2[that.result23].id == 'a') 
-            valMatrix[1][2] += 1;
-          if (that.items3[that.result33].id == 'a') 
-            valMatrix[1][2] += 1;
-          if (that.items4[that.result43].id == 'a') 
-            valMatrix[1][2] += 1;
-          if (that.items5[that.result53].id == 'a') 
-            valMatrix[1][2] += 1;
+              if (that.items1[that.result10].id == 'a')
+                valMatrix[1][1] += 1;
+              if (that.items2[that.result20].id == 'a')
+                valMatrix[1][1] += 1;
+              if (that.items3[that.result30].id == 'a')
+                valMatrix[1][1] += 1;
+              if (that.items4[that.result40].id == 'a')
+                valMatrix[1][1] += 1;
+              if (that.items5[that.result50].id == 'a')
+                valMatrix[1][1] += 1;
 
 
-          if (valMatrix[1][2] == 3) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][2] == 4) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-              document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][1] == 3) {
+                if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][1] == 4) {
+                if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'k') 
-            valMatrix[2][2] += 1;
-          if (that.items2[that.result23].id == 'k') 
-            valMatrix[2][2] += 1;
-          if (that.items3[that.result33].id == 'k') 
-            valMatrix[2][2] += 1;
-          if (that.items4[that.result43].id == 'k') 
-            valMatrix[2][2] += 1;
-          if (that.items5[that.result53].id == 'k') 
-            valMatrix[2][2] += 1;
+              if (that.items1[that.result10].id == 'k')
+                valMatrix[2][1] += 1;
+              if (that.items2[that.result20].id == 'k')
+                valMatrix[2][1] += 1;
+              if (that.items3[that.result30].id == 'k')
+                valMatrix[2][1] += 1;
+              if (that.items4[that.result40].id == 'k')
+                valMatrix[2][1] += 1;
+              if (that.items5[that.result50].id == 'k')
+                valMatrix[2][1] += 1;
 
 
-          if (valMatrix[2][2] == 3) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][2] == 4) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
+              if (valMatrix[2][1] == 3) {
+                if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][1] == 4) {
+                if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'q')
+                valMatrix[3][1] += 1;
+              if (that.items2[that.result20].id == 'q')
+                valMatrix[3][1] += 1;
+              if (that.items3[that.result30].id == 'q')
+                valMatrix[3][1] += 1;
+              if (that.items4[that.result40].id == 'q')
+                valMatrix[3][1] += 1;
+              if (that.items5[that.result50].id == 'q')
+                valMatrix[3][1] += 1;
+
+              if (valMatrix[3][1] == 3) {
+                if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][1] == 4) {
+                if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'j')
+                valMatrix[4][1] += 1;
+              if (that.items2[that.result20].id == 'j')
+                valMatrix[4][1] += 1;
+              if (that.items3[that.result30].id == 'j')
+                valMatrix[4][1] += 1;
+              if (that.items4[that.result40].id == 'j')
+                valMatrix[4][1] += 1;
+              if (that.items5[that.result50].id == 'j')
+                valMatrix[4][1] += 1;
+
+              if (valMatrix[4][1] == 3) {
+                if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][1] == 4) {
+                if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'book')
+                valMatrix[5][1] += 1;
+              if (that.items2[that.result20].id == 'book')
+                valMatrix[5][1] += 1;
+              if (that.items3[that.result30].id == 'book')
+                valMatrix[5][1] += 1;
+              if (that.items4[that.result40].id == 'book')
+                valMatrix[5][1] += 1;
+              if (that.items5[that.result50].id == 'book')
+                valMatrix[5][1] += 1;
+
+              if (valMatrix[5][1] == 3) {
+                if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][1] == 4) {
+                if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result10].id == 'raa')
+                valMatrix[6][1] += 1;
+              if (that.items2[that.result20].id == 'raa')
+                valMatrix[6][1] += 1;
+              if (that.items3[that.result30].id == 'raa')
+                valMatrix[6][1] += 1;
+              if (that.items4[that.result40].id == 'raa')
+                valMatrix[6][1] += 1;
+              if (that.items5[that.result50].id == 'raa')
+                valMatrix[6][1] += 1;
+
+              if (valMatrix[6][1] == 2) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][1] == 3) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][1] == 4) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'esc')
+                valMatrix[7][1] += 1;
+              if (that.items2[that.result20].id == 'esc')
+                valMatrix[7][1] += 1;
+              if (that.items3[that.result30].id == 'esc')
+                valMatrix[7][1] += 1;
+              if (that.items4[that.result40].id == 'esc')
+                valMatrix[7][1] += 1;
+              if (that.items5[that.result50].id == 'esc')
+                valMatrix[7][1] += 1;
+
+              if (valMatrix[7][1] == 2) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][1] == 3) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][1] == 4) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'far')
+                valMatrix[8][1] += 1;
+              if (that.items2[that.result20].id == 'far')
+                valMatrix[8][1] += 1;
+              if (that.items3[that.result30].id == 'far')
+                valMatrix[8][1] += 1;
+              if (that.items4[that.result40].id == 'far')
+                valMatrix[8][1] += 1;
+              if (that.items5[that.result50].id == 'far')
+                valMatrix[8][1] += 1;
+
+              if (valMatrix[8][1] == 2) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][1] == 3) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][1] == 4) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'indi')
+                valMatrix[9][1] += 1;
+              if (that.items2[that.result20].id == 'indi')
+                valMatrix[9][1] += 1;
+              if (that.items3[that.result30].id == 'indi')
+                valMatrix[9][1] += 1;
+              if (that.items4[that.result40].id == 'indi')
+                valMatrix[9][1] += 1;
+              if (that.items5[that.result50].id == 'indi')
+                valMatrix[9][1] += 1;
+
+              if (valMatrix[9][1] == 2) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][1] == 3) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][1] == 4) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi') {
+                  document.getElementById("win21").style.visibility = "visible";
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win22").style.visibility = "visible";
+                  document.getElementById("win23").style.visibility = "visible";
+                  document.getElementById("win24").style.visibility = "visible";
+                  document.getElementById("win25").style.visibility = "visible";
+                  document.getElementById("dos").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][1] == 5) {
+                document.getElementById("dos").style.visibility = "visible";
+                document.getElementById("win21").style.visibility = "visible";
+                document.getElementById("win22").style.visibility = "visible";
+                document.getElementById("win23").style.visibility = "visible";
+                document.getElementById("win24").style.visibility = "visible";
+                document.getElementById("win25").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 3 && linesToWin <= 3) {
+              if (that.items1[that.result13].id == '1q')
+                valMatrix[0][2] += 1;
+              if (that.items2[that.result23].id == '1q')
+                valMatrix[0][2] += 1;
+              if (that.items3[that.result33].id == '1q')
+                valMatrix[0][2] += 1;
+              if (that.items4[that.result43].id == '1q')
+                valMatrix[0][2] += 1;
+              if (that.items5[that.result53].id == '1q')
+                valMatrix[0][2] += 1;
+
+              if (valMatrix[0][2] == 3) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][2] == 4) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
                 document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'q') 
-            valMatrix[3][2] += 1;
-          if (that.items2[that.result23].id == 'q') 
-            valMatrix[3][2] += 1;
-          if (that.items3[that.result33].id == 'q') 
-            valMatrix[3][2] += 1;
-          if (that.items4[that.result43].id == 'q') 
-            valMatrix[3][2] += 1;
-          if (that.items5[that.result53].id == 'q') 
-            valMatrix[3][2] += 1;
-
-          if (valMatrix[3][2] == 3) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][2] == 4) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'j') 
-            valMatrix[4][2] += 1;
-          if (that.items2[that.result23].id == 'j') 
-            valMatrix[4][2] += 1;
-          if (that.items3[that.result33].id == 'j') 
-            valMatrix[4][2] += 1;
-          if (that.items4[that.result43].id == 'j') 
-            valMatrix[4][2] += 1;
-          if (that.items5[that.result53].id == 'j') 
-            valMatrix[4][2] += 1;
-
-          if (valMatrix[4][2] == 3) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][2] == 4) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'book') 
-            valMatrix[5][2] += 1;
-          if (that.items2[that.result23].id == 'book') 
-            valMatrix[5][2] += 1;
-          if (that.items3[that.result33].id == 'book') 
-            valMatrix[5][2] += 1;
-          if (that.items4[that.result43].id == 'book') 
-            valMatrix[5][2] += 1;
-          if (that.items5[that.result53].id == 'book') 
-            valMatrix[5][2] += 1;
-
-          if (valMatrix[5][2] == 3) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][2] == 4) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result13].id == 'raa') 
-            valMatrix[6][2] += 1;
-          if (that.items2[that.result23].id == 'raa') 
-            valMatrix[6][2] += 1;
-          if (that.items3[that.result33].id == 'raa') 
-            valMatrix[6][2] += 1;
-          if (that.items4[that.result43].id == 'raa') 
-            valMatrix[6][2] += 1;
-          if (that.items5[that.result53].id == 'raa') 
-            valMatrix[6][2] += 1;
-
-          if (valMatrix[6][2] == 2) {          
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][2] == 3) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][2] == 4) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'esc') 
-            valMatrix[7][2] += 1;
-          if (that.items2[that.result23].id == 'esc') 
-            valMatrix[7][2] += 1;
-          if (that.items3[that.result33].id == 'esc') 
-            valMatrix[7][2] += 1;
-          if (that.items4[that.result43].id == 'esc') 
-            valMatrix[7][2] += 1;
-          if (that.items5[that.result53].id == 'esc') 
-            valMatrix[7][2] += 1;
-
-          if (valMatrix[7][2] == 2) {          
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][2] == 3) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][2] == 4) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'far') 
-            valMatrix[8][2] += 1;
-          if (that.items2[that.result23].id == 'far') 
-            valMatrix[8][2] += 1;
-          if (that.items3[that.result33].id == 'far') 
-            valMatrix[8][2] += 1;
-          if (that.items4[that.result43].id == 'far') 
-            valMatrix[8][2] += 1;
-          if (that.items5[that.result53].id == 'far') 
-            valMatrix[8][2] += 1;
-
-          if (valMatrix[8][2] == 2) {          
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][2] == 3) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][2] == 4) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'indi') 
-            valMatrix[9][2] += 1;
-          if (that.items2[that.result23].id == 'indi') 
-            valMatrix[9][2] += 1;
-          if (that.items3[that.result33].id == 'indi') 
-            valMatrix[9][2] += 1;
-          if (that.items4[that.result43].id == 'indi') 
-            valMatrix[9][2] += 1;
-          if (that.items5[that.result53].id == 'indi') 
-            valMatrix[9][2] += 1;
-
-          if (valMatrix[9][2] == 2) {          
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][2] == 3) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][2] == 4) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi'){
-              document.getElementById("win31").style.visibility = "visible";
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win32").style.visibility = "visible";
-              document.getElementById("win33").style.visibility = "visible";
-              document.getElementById("win34").style.visibility = "visible";
-              document.getElementById("win35").style.visibility = "visible";
-              document.getElementById("tres").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][2] == 5){
-            document.getElementById("tres").style.visibility = "visible";
-            document.getElementById("win31").style.visibility = "visible";
-            document.getElementById("win32").style.visibility = "visible";
-            document.getElementById("win33").style.visibility = "visible";
-            document.getElementById("win34").style.visibility = "visible";
-            document.getElementById("win35").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==4 && linesToWin<=3){
-          if (that.items1[that.result10].id == '1q') 
-            valMatrix[0][3] += 1;
-          if (that.items2[that.result2].id == '1q') 
-            valMatrix[0][3] += 1;
-          if (that.items3[that.result33].id == '1q') 
-            valMatrix[0][3] += 1;
-          if (that.items4[that.result4].id == '1q') 
-            valMatrix[0][3] += 1;
-          if (that.items5[that.result50].id == '1q') 
-            valMatrix[0][3] += 1;
-
-          if (valMatrix[0][3] == 3) {
-            if (that.items1[that.result10].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result33].id == '1q'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][3] == 4) {
-            if (that.items1[that.result10].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result4].id == '1q'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'a') 
-            valMatrix[1][3] += 1;
-          if (that.items2[that.result2].id == 'a') 
-            valMatrix[1][3] += 1;
-          if (that.items3[that.result33].id == 'a') 
-            valMatrix[1][3] += 1;
-          if (that.items4[that.result4].id == 'a') 
-            valMatrix[1][3] += 1;
-          if (that.items5[that.result50].id == 'a') 
-            valMatrix[1][3] += 1;
+              if (that.items1[that.result13].id == 'a')
+                valMatrix[1][2] += 1;
+              if (that.items2[that.result23].id == 'a')
+                valMatrix[1][2] += 1;
+              if (that.items3[that.result33].id == 'a')
+                valMatrix[1][2] += 1;
+              if (that.items4[that.result43].id == 'a')
+                valMatrix[1][2] += 1;
+              if (that.items5[that.result53].id == 'a')
+                valMatrix[1][2] += 1;
 
 
-          if (valMatrix[1][3] == 3) {
-            if (that.items1[that.result10].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result33].id == 'a'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][3] == 4) {
-            if (that.items1[that.result10].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result4].id == 'a'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-              document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][2] == 3) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][2] == 4) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result10].id == 'k') 
-            valMatrix[2][3] += 1;
-          if (that.items2[that.result2].id == 'k') 
-            valMatrix[2][3] += 1;
-          if (that.items3[that.result33].id == 'k') 
-            valMatrix[2][3] += 1;
-          if (that.items4[that.result4].id == 'k') 
-            valMatrix[2][3] += 1;
-          if (that.items5[that.result50].id == 'k') 
-            valMatrix[2][3] += 1;
+              if (that.items1[that.result13].id == 'k')
+                valMatrix[2][2] += 1;
+              if (that.items2[that.result23].id == 'k')
+                valMatrix[2][2] += 1;
+              if (that.items3[that.result33].id == 'k')
+                valMatrix[2][2] += 1;
+              if (that.items4[that.result43].id == 'k')
+                valMatrix[2][2] += 1;
+              if (that.items5[that.result53].id == 'k')
+                valMatrix[2][2] += 1;
 
 
-          if (valMatrix[2][3] == 3) {
-            if (that.items1[that.result10].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result33].id == 'k'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][3] == 4) {
-            if (that.items1[that.result10].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result4].id == 'k'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
+              if (valMatrix[2][2] == 3) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][2] == 4) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'q')
+                valMatrix[3][2] += 1;
+              if (that.items2[that.result23].id == 'q')
+                valMatrix[3][2] += 1;
+              if (that.items3[that.result33].id == 'q')
+                valMatrix[3][2] += 1;
+              if (that.items4[that.result43].id == 'q')
+                valMatrix[3][2] += 1;
+              if (that.items5[that.result53].id == 'q')
+                valMatrix[3][2] += 1;
+
+              if (valMatrix[3][2] == 3) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][2] == 4) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'j')
+                valMatrix[4][2] += 1;
+              if (that.items2[that.result23].id == 'j')
+                valMatrix[4][2] += 1;
+              if (that.items3[that.result33].id == 'j')
+                valMatrix[4][2] += 1;
+              if (that.items4[that.result43].id == 'j')
+                valMatrix[4][2] += 1;
+              if (that.items5[that.result53].id == 'j')
+                valMatrix[4][2] += 1;
+
+              if (valMatrix[4][2] == 3) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][2] == 4) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'book')
+                valMatrix[5][2] += 1;
+              if (that.items2[that.result23].id == 'book')
+                valMatrix[5][2] += 1;
+              if (that.items3[that.result33].id == 'book')
+                valMatrix[5][2] += 1;
+              if (that.items4[that.result43].id == 'book')
+                valMatrix[5][2] += 1;
+              if (that.items5[that.result53].id == 'book')
+                valMatrix[5][2] += 1;
+
+              if (valMatrix[5][2] == 3) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][2] == 4) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result13].id == 'raa')
+                valMatrix[6][2] += 1;
+              if (that.items2[that.result23].id == 'raa')
+                valMatrix[6][2] += 1;
+              if (that.items3[that.result33].id == 'raa')
+                valMatrix[6][2] += 1;
+              if (that.items4[that.result43].id == 'raa')
+                valMatrix[6][2] += 1;
+              if (that.items5[that.result53].id == 'raa')
+                valMatrix[6][2] += 1;
+
+              if (valMatrix[6][2] == 2) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][2] == 3) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][2] == 4) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'esc')
+                valMatrix[7][2] += 1;
+              if (that.items2[that.result23].id == 'esc')
+                valMatrix[7][2] += 1;
+              if (that.items3[that.result33].id == 'esc')
+                valMatrix[7][2] += 1;
+              if (that.items4[that.result43].id == 'esc')
+                valMatrix[7][2] += 1;
+              if (that.items5[that.result53].id == 'esc')
+                valMatrix[7][2] += 1;
+
+              if (valMatrix[7][2] == 2) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][2] == 3) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][2] == 4) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'far')
+                valMatrix[8][2] += 1;
+              if (that.items2[that.result23].id == 'far')
+                valMatrix[8][2] += 1;
+              if (that.items3[that.result33].id == 'far')
+                valMatrix[8][2] += 1;
+              if (that.items4[that.result43].id == 'far')
+                valMatrix[8][2] += 1;
+              if (that.items5[that.result53].id == 'far')
+                valMatrix[8][2] += 1;
+
+              if (valMatrix[8][2] == 2) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][2] == 3) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][2] == 4) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'indi')
+                valMatrix[9][2] += 1;
+              if (that.items2[that.result23].id == 'indi')
+                valMatrix[9][2] += 1;
+              if (that.items3[that.result33].id == 'indi')
+                valMatrix[9][2] += 1;
+              if (that.items4[that.result43].id == 'indi')
+                valMatrix[9][2] += 1;
+              if (that.items5[that.result53].id == 'indi')
+                valMatrix[9][2] += 1;
+
+              if (valMatrix[9][2] == 2) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][2] == 3) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][2] == 4) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi') {
+                  document.getElementById("win31").style.visibility = "visible";
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win32").style.visibility = "visible";
+                  document.getElementById("win33").style.visibility = "visible";
+                  document.getElementById("win34").style.visibility = "visible";
+                  document.getElementById("win35").style.visibility = "visible";
+                  document.getElementById("tres").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][2] == 5) {
+                document.getElementById("tres").style.visibility = "visible";
+                document.getElementById("win31").style.visibility = "visible";
+                document.getElementById("win32").style.visibility = "visible";
+                document.getElementById("win33").style.visibility = "visible";
+                document.getElementById("win34").style.visibility = "visible";
+                document.getElementById("win35").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 4 && linesToWin <= 3) {
+              if (that.items1[that.result10].id == '1q')
+                valMatrix[0][3] += 1;
+              if (that.items2[that.result2].id == '1q')
+                valMatrix[0][3] += 1;
+              if (that.items3[that.result33].id == '1q')
+                valMatrix[0][3] += 1;
+              if (that.items4[that.result4].id == '1q')
+                valMatrix[0][3] += 1;
+              if (that.items5[that.result50].id == '1q')
+                valMatrix[0][3] += 1;
+
+              if (valMatrix[0][3] == 3) {
+                if (that.items1[that.result10].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result33].id == '1q') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][3] == 4) {
+                if (that.items1[that.result10].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result4].id == '1q') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
                 document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result10].id == 'q') 
-            valMatrix[3][3] += 1;
-          if (that.items2[that.result2].id == 'q') 
-            valMatrix[3][3] += 1;
-          if (that.items3[that.result33].id == 'q') 
-            valMatrix[3][3] += 1;
-          if (that.items4[that.result4].id == 'q') 
-            valMatrix[3][3] += 1;
-          if (that.items5[that.result50].id == 'q') 
-            valMatrix[3][3] += 1;
-
-          if (valMatrix[3][3] == 3) {
-            if (that.items1[that.result10].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result33].id == 'q'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][3] == 4) {
-            if (that.items1[that.result10].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result4].id == 'q'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'j') 
-            valMatrix[4][3] += 1;
-          if (that.items2[that.result2].id == 'j') 
-            valMatrix[4][3] += 1;
-          if (that.items3[that.result33].id == 'j') 
-            valMatrix[4][3] += 1;
-          if (that.items4[that.result4].id == 'j') 
-            valMatrix[4][3] += 1;
-          if (that.items5[that.result50].id == 'j') 
-            valMatrix[4][3] += 1;
-
-          if (valMatrix[4][3] == 3) {
-            if (that.items1[that.result10].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result33].id == 'j'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][3] == 4) {
-            if (that.items1[that.result10].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result4].id == 'j'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'book') 
-            valMatrix[5][3] += 1;
-          if (that.items2[that.result2].id == 'book') 
-            valMatrix[5][3] += 1;
-          if (that.items3[that.result33].id == 'book') 
-            valMatrix[5][3] += 1;
-          if (that.items4[that.result4].id == 'book') 
-            valMatrix[5][3] += 1;
-          if (that.items5[that.result50].id == 'book') 
-            valMatrix[5][3] += 1;
-
-          if (valMatrix[5][3] == 3) {
-            if (that.items1[that.result10].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result33].id == 'book'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][3] == 4) {
-            if (that.items1[that.result10].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result4].id == 'book'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result10].id == 'raa') 
-            valMatrix[6][3] += 1;
-          if (that.items2[that.result2].id == 'raa') 
-            valMatrix[6][3] += 1;
-          if (that.items3[that.result33].id == 'raa') 
-            valMatrix[6][3] += 1;
-          if (that.items4[that.result4].id == 'raa') 
-            valMatrix[6][3] += 1;
-          if (that.items5[that.result50].id == 'raa') 
-            valMatrix[6][3] += 1;
-
-          if (valMatrix[6][3] == 2) {   
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result2].id == 'raa'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][3] == 3) {
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result33].id == 'raa'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][3] == 4) {
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result4].id == 'raa'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'esc') 
-            valMatrix[7][3] += 1;
-          if (that.items2[that.result2].id == 'esc') 
-            valMatrix[7][3] += 1;
-          if (that.items3[that.result33].id == 'esc') 
-            valMatrix[7][3] += 1;
-          if (that.items4[that.result4].id == 'esc') 
-            valMatrix[7][3] += 1;
-          if (that.items5[that.result50].id == 'esc') 
-            valMatrix[7][3] += 1;
-
-          if (valMatrix[7][3] == 2) {          
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result2].id == 'esc'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][3] == 3) {
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result33].id == 'esc'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][3] == 4) {
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result4].id == 'esc'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'far') 
-            valMatrix[8][3] += 1;
-          if (that.items2[that.result2].id == 'far') 
-            valMatrix[8][3] += 1;
-          if (that.items3[that.result33].id == 'far') 
-            valMatrix[8][3] += 1;
-          if (that.items4[that.result4].id == 'far') 
-            valMatrix[8][3] += 1;
-          if (that.items5[that.result50].id == 'far') 
-            valMatrix[8][3] += 1;
-
-          if (valMatrix[8][3] == 2) {          
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result2].id == 'far'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][3] == 3) {
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result33].id == 'far'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][3] == 4) {
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result4].id == 'far'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'indi') 
-            valMatrix[9][3] += 1;
-          if (that.items2[that.result2].id == 'indi') 
-            valMatrix[9][3] += 1;
-          if (that.items3[that.result33].id == 'indi') 
-            valMatrix[9][3] += 1;
-          if (that.items4[that.result4].id == 'indi') 
-            valMatrix[9][3] += 1;
-          if (that.items5[that.result50].id == 'indi') 
-            valMatrix[9][3] += 1;
-
-          if (valMatrix[9][3] == 2) {          
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result2].id == 'indi'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][3] == 3) {
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result33].id == 'indi'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][3] == 4) {
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result4].id == 'indi'){
-              document.getElementById("win41").style.visibility = "visible";
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win42").style.visibility = "visible";
-              document.getElementById("win43").style.visibility = "visible";
-              document.getElementById("win44").style.visibility = "visible";
-              document.getElementById("win45").style.visibility = "visible";
-              document.getElementById("cuatro").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][3] == 5){
-            document.getElementById("cuatro").style.visibility = "visible";
-            document.getElementById("win41").style.visibility = "visible";
-            document.getElementById("win42").style.visibility = "visible";
-            document.getElementById("win43").style.visibility = "visible";
-            document.getElementById("win44").style.visibility = "visible";
-            document.getElementById("win45").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==5 && linesToWin<=3){
-          if (that.items1[that.result13].id == '1q') 
-            valMatrix[0][4] += 1;
-          if (that.items2[that.result2].id == '1q') 
-            valMatrix[0][4] += 1;
-          if (that.items3[that.result30].id == '1q') 
-            valMatrix[0][4] += 1;
-          if (that.items4[that.result4].id == '1q') 
-            valMatrix[0][4] += 1;
-          if (that.items5[that.result53].id == '1q') 
-            valMatrix[0][4] += 1;
-
-          if (valMatrix[0][4] == 3) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result30].id == '1q'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result53].id == '1q') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][4] == 4) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result4].id == '1q'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result53].id == '1q') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'a') 
-            valMatrix[1][4] += 1;
-          if (that.items2[that.result2].id == 'a') 
-            valMatrix[1][4] += 1;
-          if (that.items3[that.result30].id == 'a') 
-            valMatrix[1][4] += 1;
-          if (that.items4[that.result4].id == 'a') 
-            valMatrix[1][4] += 1;
-          if (that.items5[that.result53].id == 'a') 
-            valMatrix[1][4] += 1;
+              if (that.items1[that.result10].id == 'a')
+                valMatrix[1][3] += 1;
+              if (that.items2[that.result2].id == 'a')
+                valMatrix[1][3] += 1;
+              if (that.items3[that.result33].id == 'a')
+                valMatrix[1][3] += 1;
+              if (that.items4[that.result4].id == 'a')
+                valMatrix[1][3] += 1;
+              if (that.items5[that.result50].id == 'a')
+                valMatrix[1][3] += 1;
 
 
-          if (valMatrix[1][4] == 3) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result30].id == 'a'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result53].id == 'a') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][4] == 4) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result4].id == 'a'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result53].id == 'a') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-              document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][3] == 3) {
+                if (that.items1[that.result10].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result33].id == 'a') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][3] == 4) {
+                if (that.items1[that.result10].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result4].id == 'a') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'k') 
-            valMatrix[2][4] += 1;
-          if (that.items2[that.result2].id == 'k') 
-            valMatrix[2][4] += 1;
-          if (that.items3[that.result30].id == 'k') 
-            valMatrix[2][4] += 1;
-          if (that.items4[that.result4].id == 'k') 
-            valMatrix[2][4] += 1;
-          if (that.items5[that.result53].id == 'k') 
-            valMatrix[2][4] += 1;
+              if (that.items1[that.result10].id == 'k')
+                valMatrix[2][3] += 1;
+              if (that.items2[that.result2].id == 'k')
+                valMatrix[2][3] += 1;
+              if (that.items3[that.result33].id == 'k')
+                valMatrix[2][3] += 1;
+              if (that.items4[that.result4].id == 'k')
+                valMatrix[2][3] += 1;
+              if (that.items5[that.result50].id == 'k')
+                valMatrix[2][3] += 1;
 
 
-          if (valMatrix[2][4] == 3) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result30].id == 'k'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result53].id == 'k') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][4] == 4) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result4].id == 'k'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result53].id == 'k') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
+              if (valMatrix[2][3] == 3) {
+                if (that.items1[that.result10].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result33].id == 'k') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][3] == 4) {
+                if (that.items1[that.result10].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result4].id == 'k') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'q')
+                valMatrix[3][3] += 1;
+              if (that.items2[that.result2].id == 'q')
+                valMatrix[3][3] += 1;
+              if (that.items3[that.result33].id == 'q')
+                valMatrix[3][3] += 1;
+              if (that.items4[that.result4].id == 'q')
+                valMatrix[3][3] += 1;
+              if (that.items5[that.result50].id == 'q')
+                valMatrix[3][3] += 1;
+
+              if (valMatrix[3][3] == 3) {
+                if (that.items1[that.result10].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result33].id == 'q') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][3] == 4) {
+                if (that.items1[that.result10].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result4].id == 'q') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'j')
+                valMatrix[4][3] += 1;
+              if (that.items2[that.result2].id == 'j')
+                valMatrix[4][3] += 1;
+              if (that.items3[that.result33].id == 'j')
+                valMatrix[4][3] += 1;
+              if (that.items4[that.result4].id == 'j')
+                valMatrix[4][3] += 1;
+              if (that.items5[that.result50].id == 'j')
+                valMatrix[4][3] += 1;
+
+              if (valMatrix[4][3] == 3) {
+                if (that.items1[that.result10].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result33].id == 'j') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][3] == 4) {
+                if (that.items1[that.result10].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result4].id == 'j') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'book')
+                valMatrix[5][3] += 1;
+              if (that.items2[that.result2].id == 'book')
+                valMatrix[5][3] += 1;
+              if (that.items3[that.result33].id == 'book')
+                valMatrix[5][3] += 1;
+              if (that.items4[that.result4].id == 'book')
+                valMatrix[5][3] += 1;
+              if (that.items5[that.result50].id == 'book')
+                valMatrix[5][3] += 1;
+
+              if (valMatrix[5][3] == 3) {
+                if (that.items1[that.result10].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result33].id == 'book') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][3] == 4) {
+                if (that.items1[that.result10].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result4].id == 'book') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result10].id == 'raa')
+                valMatrix[6][3] += 1;
+              if (that.items2[that.result2].id == 'raa')
+                valMatrix[6][3] += 1;
+              if (that.items3[that.result33].id == 'raa')
+                valMatrix[6][3] += 1;
+              if (that.items4[that.result4].id == 'raa')
+                valMatrix[6][3] += 1;
+              if (that.items5[that.result50].id == 'raa')
+                valMatrix[6][3] += 1;
+
+              if (valMatrix[6][3] == 2) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result2].id == 'raa') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][3] == 3) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result33].id == 'raa') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][3] == 4) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result4].id == 'raa') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'esc')
+                valMatrix[7][3] += 1;
+              if (that.items2[that.result2].id == 'esc')
+                valMatrix[7][3] += 1;
+              if (that.items3[that.result33].id == 'esc')
+                valMatrix[7][3] += 1;
+              if (that.items4[that.result4].id == 'esc')
+                valMatrix[7][3] += 1;
+              if (that.items5[that.result50].id == 'esc')
+                valMatrix[7][3] += 1;
+
+              if (valMatrix[7][3] == 2) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result2].id == 'esc') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][3] == 3) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result33].id == 'esc') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][3] == 4) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result4].id == 'esc') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'far')
+                valMatrix[8][3] += 1;
+              if (that.items2[that.result2].id == 'far')
+                valMatrix[8][3] += 1;
+              if (that.items3[that.result33].id == 'far')
+                valMatrix[8][3] += 1;
+              if (that.items4[that.result4].id == 'far')
+                valMatrix[8][3] += 1;
+              if (that.items5[that.result50].id == 'far')
+                valMatrix[8][3] += 1;
+
+              if (valMatrix[8][3] == 2) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result2].id == 'far') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][3] == 3) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result33].id == 'far') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][3] == 4) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result4].id == 'far') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'indi')
+                valMatrix[9][3] += 1;
+              if (that.items2[that.result2].id == 'indi')
+                valMatrix[9][3] += 1;
+              if (that.items3[that.result33].id == 'indi')
+                valMatrix[9][3] += 1;
+              if (that.items4[that.result4].id == 'indi')
+                valMatrix[9][3] += 1;
+              if (that.items5[that.result50].id == 'indi')
+                valMatrix[9][3] += 1;
+
+              if (valMatrix[9][3] == 2) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result2].id == 'indi') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][3] == 3) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result33].id == 'indi') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][3] == 4) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result4].id == 'indi') {
+                  document.getElementById("win41").style.visibility = "visible";
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win42").style.visibility = "visible";
+                  document.getElementById("win43").style.visibility = "visible";
+                  document.getElementById("win44").style.visibility = "visible";
+                  document.getElementById("win45").style.visibility = "visible";
+                  document.getElementById("cuatro").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][3] == 5) {
+                document.getElementById("cuatro").style.visibility = "visible";
+                document.getElementById("win41").style.visibility = "visible";
+                document.getElementById("win42").style.visibility = "visible";
+                document.getElementById("win43").style.visibility = "visible";
+                document.getElementById("win44").style.visibility = "visible";
+                document.getElementById("win45").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 5 && linesToWin <= 3) {
+              if (that.items1[that.result13].id == '1q')
+                valMatrix[0][4] += 1;
+              if (that.items2[that.result2].id == '1q')
+                valMatrix[0][4] += 1;
+              if (that.items3[that.result30].id == '1q')
+                valMatrix[0][4] += 1;
+              if (that.items4[that.result4].id == '1q')
+                valMatrix[0][4] += 1;
+              if (that.items5[that.result53].id == '1q')
+                valMatrix[0][4] += 1;
+
+              if (valMatrix[0][4] == 3) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result30].id == '1q') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result53].id == '1q') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][4] == 4) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result4].id == '1q') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result53].id == '1q') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
                 document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'q') 
-            valMatrix[3][4] += 1;
-          if (that.items2[that.result2].id == 'q') 
-            valMatrix[3][4] += 1;
-          if (that.items3[that.result30].id == 'q') 
-            valMatrix[3][4] += 1;
-          if (that.items4[that.result4].id == 'q') 
-            valMatrix[3][4] += 1;
-          if (that.items5[that.result53].id == 'q') 
-            valMatrix[3][4] += 1;
-
-          if (valMatrix[3][4] == 3) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result30].id == 'q'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result53].id == 'q') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][4] == 4) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result4].id == 'q'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result53].id == 'q') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'j') 
-            valMatrix[4][4] += 1;
-          if (that.items2[that.result2].id == 'j') 
-            valMatrix[4][4] += 1;
-          if (that.items3[that.result30].id == 'j') 
-            valMatrix[4][4] += 1;
-          if (that.items4[that.result4].id == 'j') 
-            valMatrix[4][4] += 1;
-          if (that.items5[that.result53].id == 'j') 
-            valMatrix[4][4] += 1;
-
-          if (valMatrix[4][4] == 3) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result30].id == 'j'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result53].id == 'j') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][4] == 4) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result4].id == 'j'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result53].id == 'j') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'book') 
-            valMatrix[5][4] += 1;
-          if (that.items2[that.result2].id == 'book') 
-            valMatrix[5][4] += 1;
-          if (that.items3[that.result30].id == 'book') 
-            valMatrix[5][4] += 1;
-          if (that.items4[that.result4].id == 'book') 
-            valMatrix[5][4] += 1;
-          if (that.items5[that.result53].id == 'book') 
-            valMatrix[5][4] += 1;
-
-          if (valMatrix[5][4] == 3) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result30].id == 'book'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result53].id == 'book') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][4] == 4) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result4].id == 'book'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result53].id == 'book') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result13].id == 'raa') 
-            valMatrix[6][4] += 1;
-          if (that.items2[that.result2].id == 'raa') 
-            valMatrix[6][4] += 1;
-          if (that.items3[that.result30].id == 'raa') 
-            valMatrix[6][4] += 1;
-          if (that.items4[that.result4].id == 'raa') 
-            valMatrix[6][4] += 1;
-          if (that.items5[that.result53].id == 'raa') 
-            valMatrix[6][4] += 1;
-
-          if (valMatrix[6][4] == 2) {   
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][4] == 3) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result30].id == 'raa'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][4] == 4) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result4].id == 'raa'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'esc') 
-            valMatrix[7][4] += 1;
-          if (that.items2[that.result2].id == 'esc') 
-            valMatrix[7][4] += 1;
-          if (that.items3[that.result30].id == 'esc') 
-            valMatrix[7][4] += 1;
-          if (that.items4[that.result4].id == 'esc') 
-            valMatrix[7][4] += 1;
-          if (that.items5[that.result53].id == 'esc') 
-            valMatrix[7][4] += 1;
-
-          if (valMatrix[7][4] == 2) {          
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][4] == 3) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result30].id == 'esc'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][4] == 4) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result4].id == 'esc'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'far') 
-            valMatrix[8][4] += 1;
-          if (that.items2[that.result2].id == 'far') 
-            valMatrix[8][4] += 1;
-          if (that.items3[that.result30].id == 'far') 
-            valMatrix[8][4] += 1;
-          if (that.items4[that.result4].id == 'far') 
-            valMatrix[8][4] += 1;
-          if (that.items5[that.result53].id == 'far') 
-            valMatrix[8][4] += 1;
-
-          if (valMatrix[8][4] == 2) {          
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][4] == 3) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result30].id == 'far'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][4] == 4) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result4].id == 'far'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'indi') 
-            valMatrix[9][4] += 1;
-          if (that.items2[that.result2].id == 'indi') 
-            valMatrix[9][4] += 1;
-          if (that.items3[that.result30].id == 'indi') 
-            valMatrix[9][4] += 1;
-          if (that.items4[that.result4].id == 'indi') 
-            valMatrix[9][4] += 1;
-          if (that.items5[that.result53].id == 'indi') 
-            valMatrix[9][4] += 1;
-
-          if (valMatrix[9][4] == 2) {          
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][4] == 3) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result30].id == 'indi'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][4] == 4) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result4].id == 'indi'){
-              document.getElementById("win51").style.visibility = "visible";
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win52").style.visibility = "visible";
-              document.getElementById("win53").style.visibility = "visible";
-              document.getElementById("win54").style.visibility = "visible";
-              document.getElementById("win55").style.visibility = "visible";
-              document.getElementById("cinco").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][4] == 5){
-            document.getElementById("cinco").style.visibility = "visible";
-            document.getElementById("win51").style.visibility = "visible";
-            document.getElementById("win52").style.visibility = "visible";
-            document.getElementById("win53").style.visibility = "visible";
-            document.getElementById("win54").style.visibility = "visible";
-            document.getElementById("win55").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==6 && linesToWin<=3){
-          if (that.items1[that.result1].id == '1q') 
-            valMatrix[0][5] += 1;
-          if (that.items2[that.result23].id == '1q') 
-            valMatrix[0][5] += 1;
-          if (that.items3[that.result33].id == '1q') 
-            valMatrix[0][5] += 1;
-          if (that.items4[that.result43].id == '1q') 
-            valMatrix[0][5] += 1;
-          if (that.items5[that.result5].id == '1q') 
-            valMatrix[0][5] += 1;
-
-          if (valMatrix[0][5] == 3) {
-            if (that.items1[that.result1].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result5].id == '1q') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][5] == 4) {
-            if (that.items1[that.result1].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result5].id == '1q') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'a') 
-            valMatrix[1][5] += 1;
-          if (that.items2[that.result23].id == 'a') 
-            valMatrix[1][5] += 1;
-          if (that.items3[that.result33].id == 'a') 
-            valMatrix[1][5] += 1;
-          if (that.items4[that.result43].id == 'a') 
-            valMatrix[1][5] += 1;
-          if (that.items5[that.result5].id == 'a') 
-            valMatrix[1][5] += 1;
+              if (that.items1[that.result13].id == 'a')
+                valMatrix[1][4] += 1;
+              if (that.items2[that.result2].id == 'a')
+                valMatrix[1][4] += 1;
+              if (that.items3[that.result30].id == 'a')
+                valMatrix[1][4] += 1;
+              if (that.items4[that.result4].id == 'a')
+                valMatrix[1][4] += 1;
+              if (that.items5[that.result53].id == 'a')
+                valMatrix[1][4] += 1;
 
 
-          if (valMatrix[1][5] == 3) {
-            if (that.items1[that.result1].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result5].id == 'a') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][5] == 4) {
-            if (that.items1[that.result1].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result5].id == 'a') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-              document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][4] == 3) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result30].id == 'a') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result53].id == 'a') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][4] == 4) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result4].id == 'a') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result53].id == 'a') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result1].id == 'k') 
-            valMatrix[2][5] += 1;
-          if (that.items2[that.result23].id == 'k') 
-            valMatrix[2][5] += 1;
-          if (that.items3[that.result33].id == 'k') 
-            valMatrix[2][5] += 1;
-          if (that.items4[that.result43].id == 'k') 
-            valMatrix[2][5] += 1;
-          if (that.items5[that.result5].id == 'k') 
-            valMatrix[2][5] += 1;
+              if (that.items1[that.result13].id == 'k')
+                valMatrix[2][4] += 1;
+              if (that.items2[that.result2].id == 'k')
+                valMatrix[2][4] += 1;
+              if (that.items3[that.result30].id == 'k')
+                valMatrix[2][4] += 1;
+              if (that.items4[that.result4].id == 'k')
+                valMatrix[2][4] += 1;
+              if (that.items5[that.result53].id == 'k')
+                valMatrix[2][4] += 1;
 
 
-          if (valMatrix[2][5] == 3) {
-            if (that.items1[that.result1].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result5].id == 'k') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][5] == 4) {
-            if (that.items1[that.result1].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result5].id == 'k') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
+              if (valMatrix[2][4] == 3) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result30].id == 'k') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result53].id == 'k') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][4] == 4) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result4].id == 'k') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result53].id == 'k') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'q')
+                valMatrix[3][4] += 1;
+              if (that.items2[that.result2].id == 'q')
+                valMatrix[3][4] += 1;
+              if (that.items3[that.result30].id == 'q')
+                valMatrix[3][4] += 1;
+              if (that.items4[that.result4].id == 'q')
+                valMatrix[3][4] += 1;
+              if (that.items5[that.result53].id == 'q')
+                valMatrix[3][4] += 1;
+
+              if (valMatrix[3][4] == 3) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result30].id == 'q') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result53].id == 'q') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][4] == 4) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result4].id == 'q') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result53].id == 'q') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'j')
+                valMatrix[4][4] += 1;
+              if (that.items2[that.result2].id == 'j')
+                valMatrix[4][4] += 1;
+              if (that.items3[that.result30].id == 'j')
+                valMatrix[4][4] += 1;
+              if (that.items4[that.result4].id == 'j')
+                valMatrix[4][4] += 1;
+              if (that.items5[that.result53].id == 'j')
+                valMatrix[4][4] += 1;
+
+              if (valMatrix[4][4] == 3) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result30].id == 'j') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result53].id == 'j') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][4] == 4) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result4].id == 'j') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result53].id == 'j') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'book')
+                valMatrix[5][4] += 1;
+              if (that.items2[that.result2].id == 'book')
+                valMatrix[5][4] += 1;
+              if (that.items3[that.result30].id == 'book')
+                valMatrix[5][4] += 1;
+              if (that.items4[that.result4].id == 'book')
+                valMatrix[5][4] += 1;
+              if (that.items5[that.result53].id == 'book')
+                valMatrix[5][4] += 1;
+
+              if (valMatrix[5][4] == 3) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result30].id == 'book') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result53].id == 'book') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][4] == 4) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result4].id == 'book') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result53].id == 'book') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result13].id == 'raa')
+                valMatrix[6][4] += 1;
+              if (that.items2[that.result2].id == 'raa')
+                valMatrix[6][4] += 1;
+              if (that.items3[that.result30].id == 'raa')
+                valMatrix[6][4] += 1;
+              if (that.items4[that.result4].id == 'raa')
+                valMatrix[6][4] += 1;
+              if (that.items5[that.result53].id == 'raa')
+                valMatrix[6][4] += 1;
+
+              if (valMatrix[6][4] == 2) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][4] == 3) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result30].id == 'raa') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][4] == 4) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result4].id == 'raa') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'esc')
+                valMatrix[7][4] += 1;
+              if (that.items2[that.result2].id == 'esc')
+                valMatrix[7][4] += 1;
+              if (that.items3[that.result30].id == 'esc')
+                valMatrix[7][4] += 1;
+              if (that.items4[that.result4].id == 'esc')
+                valMatrix[7][4] += 1;
+              if (that.items5[that.result53].id == 'esc')
+                valMatrix[7][4] += 1;
+
+              if (valMatrix[7][4] == 2) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][4] == 3) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result30].id == 'esc') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][4] == 4) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result4].id == 'esc') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'far')
+                valMatrix[8][4] += 1;
+              if (that.items2[that.result2].id == 'far')
+                valMatrix[8][4] += 1;
+              if (that.items3[that.result30].id == 'far')
+                valMatrix[8][4] += 1;
+              if (that.items4[that.result4].id == 'far')
+                valMatrix[8][4] += 1;
+              if (that.items5[that.result53].id == 'far')
+                valMatrix[8][4] += 1;
+
+              if (valMatrix[8][4] == 2) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][4] == 3) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result30].id == 'far') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][4] == 4) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result4].id == 'far') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'indi')
+                valMatrix[9][4] += 1;
+              if (that.items2[that.result2].id == 'indi')
+                valMatrix[9][4] += 1;
+              if (that.items3[that.result30].id == 'indi')
+                valMatrix[9][4] += 1;
+              if (that.items4[that.result4].id == 'indi')
+                valMatrix[9][4] += 1;
+              if (that.items5[that.result53].id == 'indi')
+                valMatrix[9][4] += 1;
+
+              if (valMatrix[9][4] == 2) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][4] == 3) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result30].id == 'indi') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][4] == 4) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result4].id == 'indi') {
+                  document.getElementById("win51").style.visibility = "visible";
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win52").style.visibility = "visible";
+                  document.getElementById("win53").style.visibility = "visible";
+                  document.getElementById("win54").style.visibility = "visible";
+                  document.getElementById("win55").style.visibility = "visible";
+                  document.getElementById("cinco").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][4] == 5) {
+                document.getElementById("cinco").style.visibility = "visible";
+                document.getElementById("win51").style.visibility = "visible";
+                document.getElementById("win52").style.visibility = "visible";
+                document.getElementById("win53").style.visibility = "visible";
+                document.getElementById("win54").style.visibility = "visible";
+                document.getElementById("win55").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 6 && linesToWin <= 3) {
+              if (that.items1[that.result1].id == '1q')
+                valMatrix[0][5] += 1;
+              if (that.items2[that.result23].id == '1q')
+                valMatrix[0][5] += 1;
+              if (that.items3[that.result33].id == '1q')
+                valMatrix[0][5] += 1;
+              if (that.items4[that.result43].id == '1q')
+                valMatrix[0][5] += 1;
+              if (that.items5[that.result5].id == '1q')
+                valMatrix[0][5] += 1;
+
+              if (valMatrix[0][5] == 3) {
+                if (that.items1[that.result1].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result5].id == '1q') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][5] == 4) {
+                if (that.items1[that.result1].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == '1q' && that.items3[that.result33].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result5].id == '1q') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
                 document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result1].id == 'q') 
-            valMatrix[3][5] += 1;
-          if (that.items2[that.result23].id == 'q') 
-            valMatrix[3][5] += 1;
-          if (that.items3[that.result33].id == 'q') 
-            valMatrix[3][5] += 1;
-          if (that.items4[that.result43].id == 'q') 
-            valMatrix[3][5] += 1;
-          if (that.items5[that.result5].id == 'q') 
-            valMatrix[3][5] += 1;
-
-          if (valMatrix[3][5] == 3) {
-            if (that.items1[that.result1].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result5].id == 'q') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][5] == 4) {
-            if (that.items1[that.result1].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result5].id == 'q') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'j') 
-            valMatrix[4][5] += 1;
-          if (that.items2[that.result23].id == 'j') 
-            valMatrix[4][5] += 1;
-          if (that.items3[that.result33].id == 'j') 
-            valMatrix[4][5] += 1;
-          if (that.items4[that.result43].id == 'j') 
-            valMatrix[4][5] += 1;
-          if (that.items5[that.result5].id == 'j') 
-            valMatrix[4][5] += 1;
-
-          if (valMatrix[4][5] == 3) {
-            if (that.items1[that.result1].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result5].id == 'j') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][5] == 4) {
-            if (that.items1[that.result1].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result5].id == 'j') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'book') 
-            valMatrix[5][5] += 1;
-          if (that.items2[that.result23].id == 'book') 
-            valMatrix[5][5] += 1;
-          if (that.items3[that.result33].id == 'book') 
-            valMatrix[5][5] += 1;
-          if (that.items4[that.result43].id == 'book') 
-            valMatrix[5][5] += 1;
-          if (that.items5[that.result5].id == 'book') 
-            valMatrix[5][5] += 1;
-
-          if (valMatrix[5][5] == 3) {
-            if (that.items1[that.result1].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result5].id == 'book') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][5] == 4) {
-            if (that.items1[that.result1].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result5].id == 'book') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result1].id == 'raa') 
-            valMatrix[6][5] += 1;
-          if (that.items2[that.result23].id == 'raa') 
-            valMatrix[6][5] += 1;
-          if (that.items3[that.result33].id == 'raa') 
-            valMatrix[6][5] += 1;
-          if (that.items4[that.result43].id == 'raa') 
-            valMatrix[6][5] += 1;
-          if (that.items5[that.result5].id == 'raa') 
-            valMatrix[6][5] += 1;
-
-          if (valMatrix[6][5] == 2) {   
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result23].id == 'raa'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][5] == 3) {
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][5] == 4) {
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'esc') 
-            valMatrix[7][5] += 1;
-          if (that.items2[that.result23].id == 'esc') 
-            valMatrix[7][5] += 1;
-          if (that.items3[that.result33].id == 'esc') 
-            valMatrix[7][5] += 1;
-          if (that.items4[that.result43].id == 'esc') 
-            valMatrix[7][5] += 1;
-          if (that.items5[that.result5].id == 'esc') 
-            valMatrix[7][5] += 1;
-
-          if (valMatrix[7][5] == 2) {          
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result23].id == 'esc'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][5] == 3) {
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][5] == 4) {
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'far') 
-            valMatrix[8][5] += 1;
-          if (that.items2[that.result23].id == 'far') 
-            valMatrix[8][5] += 1;
-          if (that.items3[that.result33].id == 'far') 
-            valMatrix[8][5] += 1;
-          if (that.items4[that.result43].id == 'far') 
-            valMatrix[8][5] += 1;
-          if (that.items5[that.result5].id == 'far') 
-            valMatrix[8][5] += 1;
-
-          if (valMatrix[8][5] == 2) {          
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result23].id == 'far'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][5] == 3) {
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][5] == 4) {
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'indi') 
-            valMatrix[9][5] += 1;
-          if (that.items2[that.result23].id == 'indi') 
-            valMatrix[9][5] += 1;
-          if (that.items3[that.result33].id == 'indi') 
-            valMatrix[9][5] += 1;
-          if (that.items4[that.result43].id == 'indi') 
-            valMatrix[9][5] += 1;
-          if (that.items5[that.result5].id == 'indi') 
-            valMatrix[9][5] += 1;
-
-          if (valMatrix[9][5] == 2) {          
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result23].id == 'indi'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][5] == 3) {
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][5] == 4) {
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi'){
-              document.getElementById("win61").style.visibility = "visible";
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win62").style.visibility = "visible";
-              document.getElementById("win63").style.visibility = "visible";
-              document.getElementById("win64").style.visibility = "visible";
-              document.getElementById("win65").style.visibility = "visible";
-              document.getElementById("seis").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][5] == 5){
-            document.getElementById("seis").style.visibility = "visible";
-            document.getElementById("win61").style.visibility = "visible";
-            document.getElementById("win62").style.visibility = "visible";
-            document.getElementById("win63").style.visibility = "visible";
-            document.getElementById("win64").style.visibility = "visible";
-            document.getElementById("win65").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==7 && linesToWin<=3){
-          if (that.items1[that.result1].id == '1q') 
-            valMatrix[0][6] += 1;
-          if (that.items2[that.result20].id == '1q') 
-            valMatrix[0][6] += 1;
-          if (that.items3[that.result30].id == '1q') 
-            valMatrix[0][6] += 1;
-          if (that.items4[that.result40].id == '1q') 
-            valMatrix[0][6] += 1;
-          if (that.items5[that.result5].id == '1q') 
-            valMatrix[0][6] += 1;
-
-          if (valMatrix[0][6] == 3) {
-            if (that.items1[that.result1].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result5].id == '1q') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][6] == 4) {
-            if (that.items1[that.result1].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result5].id == '1q') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'a') 
-            valMatrix[1][6] += 1;
-          if (that.items2[that.result20].id == 'a') 
-            valMatrix[1][6] += 1;
-          if (that.items3[that.result30].id == 'a') 
-            valMatrix[1][6] += 1;
-          if (that.items4[that.result40].id == 'a') 
-            valMatrix[1][6] += 1;
-          if (that.items5[that.result5].id == 'a') 
-            valMatrix[1][6] += 1;
+              if (that.items1[that.result1].id == 'a')
+                valMatrix[1][5] += 1;
+              if (that.items2[that.result23].id == 'a')
+                valMatrix[1][5] += 1;
+              if (that.items3[that.result33].id == 'a')
+                valMatrix[1][5] += 1;
+              if (that.items4[that.result43].id == 'a')
+                valMatrix[1][5] += 1;
+              if (that.items5[that.result5].id == 'a')
+                valMatrix[1][5] += 1;
 
 
-          if (valMatrix[1][6] == 3) {
-            if (that.items1[that.result1].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result5].id == 'a') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][6] == 4) {
-            if (that.items1[that.result1].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result5].id == 'a') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-              document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][5] == 3) {
+                if (that.items1[that.result1].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result5].id == 'a') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][5] == 4) {
+                if (that.items1[that.result1].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'a' && that.items3[that.result33].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result5].id == 'a') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result1].id == 'k') 
-            valMatrix[2][6] += 1;
-          if (that.items2[that.result20].id == 'k') 
-            valMatrix[2][6] += 1;
-          if (that.items3[that.result30].id == 'k') 
-            valMatrix[2][6] += 1;
-          if (that.items4[that.result40].id == 'k') 
-            valMatrix[2][6] += 1;
-          if (that.items5[that.result5].id == 'k') 
-            valMatrix[2][6] += 1;
+              if (that.items1[that.result1].id == 'k')
+                valMatrix[2][5] += 1;
+              if (that.items2[that.result23].id == 'k')
+                valMatrix[2][5] += 1;
+              if (that.items3[that.result33].id == 'k')
+                valMatrix[2][5] += 1;
+              if (that.items4[that.result43].id == 'k')
+                valMatrix[2][5] += 1;
+              if (that.items5[that.result5].id == 'k')
+                valMatrix[2][5] += 1;
 
 
-          if (valMatrix[2][6] == 3) {
-            if (that.items1[that.result1].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result5].id == 'k') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][6] == 4) {
-            if (that.items1[that.result1].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result5].id == 'k') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
+              if (valMatrix[2][5] == 3) {
+                if (that.items1[that.result1].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result5].id == 'k') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][5] == 4) {
+                if (that.items1[that.result1].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'k' && that.items3[that.result33].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result5].id == 'k') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'q')
+                valMatrix[3][5] += 1;
+              if (that.items2[that.result23].id == 'q')
+                valMatrix[3][5] += 1;
+              if (that.items3[that.result33].id == 'q')
+                valMatrix[3][5] += 1;
+              if (that.items4[that.result43].id == 'q')
+                valMatrix[3][5] += 1;
+              if (that.items5[that.result5].id == 'q')
+                valMatrix[3][5] += 1;
+
+              if (valMatrix[3][5] == 3) {
+                if (that.items1[that.result1].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result5].id == 'q') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][5] == 4) {
+                if (that.items1[that.result1].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'q' && that.items3[that.result33].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result5].id == 'q') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'j')
+                valMatrix[4][5] += 1;
+              if (that.items2[that.result23].id == 'j')
+                valMatrix[4][5] += 1;
+              if (that.items3[that.result33].id == 'j')
+                valMatrix[4][5] += 1;
+              if (that.items4[that.result43].id == 'j')
+                valMatrix[4][5] += 1;
+              if (that.items5[that.result5].id == 'j')
+                valMatrix[4][5] += 1;
+
+              if (valMatrix[4][5] == 3) {
+                if (that.items1[that.result1].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result5].id == 'j') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][5] == 4) {
+                if (that.items1[that.result1].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'j' && that.items3[that.result33].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result5].id == 'j') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'book')
+                valMatrix[5][5] += 1;
+              if (that.items2[that.result23].id == 'book')
+                valMatrix[5][5] += 1;
+              if (that.items3[that.result33].id == 'book')
+                valMatrix[5][5] += 1;
+              if (that.items4[that.result43].id == 'book')
+                valMatrix[5][5] += 1;
+              if (that.items5[that.result5].id == 'book')
+                valMatrix[5][5] += 1;
+
+              if (valMatrix[5][5] == 3) {
+                if (that.items1[that.result1].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result5].id == 'book') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][5] == 4) {
+                if (that.items1[that.result1].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'book' && that.items3[that.result33].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result5].id == 'book') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result1].id == 'raa')
+                valMatrix[6][5] += 1;
+              if (that.items2[that.result23].id == 'raa')
+                valMatrix[6][5] += 1;
+              if (that.items3[that.result33].id == 'raa')
+                valMatrix[6][5] += 1;
+              if (that.items4[that.result43].id == 'raa')
+                valMatrix[6][5] += 1;
+              if (that.items5[that.result5].id == 'raa')
+                valMatrix[6][5] += 1;
+
+              if (valMatrix[6][5] == 2) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result23].id == 'raa') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][5] == 3) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][5] == 4) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'raa' && that.items3[that.result33].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'esc')
+                valMatrix[7][5] += 1;
+              if (that.items2[that.result23].id == 'esc')
+                valMatrix[7][5] += 1;
+              if (that.items3[that.result33].id == 'esc')
+                valMatrix[7][5] += 1;
+              if (that.items4[that.result43].id == 'esc')
+                valMatrix[7][5] += 1;
+              if (that.items5[that.result5].id == 'esc')
+                valMatrix[7][5] += 1;
+
+              if (valMatrix[7][5] == 2) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result23].id == 'esc') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][5] == 3) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][5] == 4) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'esc' && that.items3[that.result33].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'far')
+                valMatrix[8][5] += 1;
+              if (that.items2[that.result23].id == 'far')
+                valMatrix[8][5] += 1;
+              if (that.items3[that.result33].id == 'far')
+                valMatrix[8][5] += 1;
+              if (that.items4[that.result43].id == 'far')
+                valMatrix[8][5] += 1;
+              if (that.items5[that.result5].id == 'far')
+                valMatrix[8][5] += 1;
+
+              if (valMatrix[8][5] == 2) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result23].id == 'far') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][5] == 3) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][5] == 4) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'far' && that.items3[that.result33].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'indi')
+                valMatrix[9][5] += 1;
+              if (that.items2[that.result23].id == 'indi')
+                valMatrix[9][5] += 1;
+              if (that.items3[that.result33].id == 'indi')
+                valMatrix[9][5] += 1;
+              if (that.items4[that.result43].id == 'indi')
+                valMatrix[9][5] += 1;
+              if (that.items5[that.result5].id == 'indi')
+                valMatrix[9][5] += 1;
+
+              if (valMatrix[9][5] == 2) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result23].id == 'indi') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][5] == 3) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][5] == 4) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi') {
+                  document.getElementById("win61").style.visibility = "visible";
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'indi' && that.items3[that.result33].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win62").style.visibility = "visible";
+                  document.getElementById("win63").style.visibility = "visible";
+                  document.getElementById("win64").style.visibility = "visible";
+                  document.getElementById("win65").style.visibility = "visible";
+                  document.getElementById("seis").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][5] == 5) {
+                document.getElementById("seis").style.visibility = "visible";
+                document.getElementById("win61").style.visibility = "visible";
+                document.getElementById("win62").style.visibility = "visible";
+                document.getElementById("win63").style.visibility = "visible";
+                document.getElementById("win64").style.visibility = "visible";
+                document.getElementById("win65").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 7 && linesToWin <= 3) {
+              if (that.items1[that.result1].id == '1q')
+                valMatrix[0][6] += 1;
+              if (that.items2[that.result20].id == '1q')
+                valMatrix[0][6] += 1;
+              if (that.items3[that.result30].id == '1q')
+                valMatrix[0][6] += 1;
+              if (that.items4[that.result40].id == '1q')
+                valMatrix[0][6] += 1;
+              if (that.items5[that.result5].id == '1q')
+                valMatrix[0][6] += 1;
+
+              if (valMatrix[0][6] == 3) {
+                if (that.items1[that.result1].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result5].id == '1q') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][6] == 4) {
+                if (that.items1[that.result1].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == '1q' && that.items3[that.result30].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result5].id == '1q') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
                 document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result1].id == 'q') 
-            valMatrix[3][6] += 1;
-          if (that.items2[that.result20].id == 'q') 
-            valMatrix[3][6] += 1;
-          if (that.items3[that.result30].id == 'q') 
-            valMatrix[3][6] += 1;
-          if (that.items4[that.result40].id == 'q') 
-            valMatrix[3][6] += 1;
-          if (that.items5[that.result5].id == 'q') 
-            valMatrix[3][6] += 1;
-
-          if (valMatrix[3][6] == 3) {
-            if (that.items1[that.result1].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result5].id == 'q') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][6] == 4) {
-            if (that.items1[that.result1].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result5].id == 'q') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'j') 
-            valMatrix[4][6] += 1;
-          if (that.items2[that.result20].id == 'j') 
-            valMatrix[4][6] += 1;
-          if (that.items3[that.result30].id == 'j') 
-            valMatrix[4][6] += 1;
-          if (that.items4[that.result40].id == 'j') 
-            valMatrix[4][6] += 1;
-          if (that.items5[that.result5].id == 'j') 
-            valMatrix[4][6] += 1;
-
-          if (valMatrix[4][6] == 3) {
-            if (that.items1[that.result1].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result5].id == 'j') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][6] == 4) {
-            if (that.items1[that.result1].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result5].id == 'j') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'book') 
-            valMatrix[5][6] += 1;
-          if (that.items2[that.result20].id == 'book') 
-            valMatrix[5][6] += 1;
-          if (that.items3[that.result30].id == 'book') 
-            valMatrix[5][6] += 1;
-          if (that.items4[that.result40].id == 'book') 
-            valMatrix[5][6] += 1;
-          if (that.items5[that.result5].id == 'book') 
-            valMatrix[5][6] += 1;
-
-          if (valMatrix[5][6] == 3) {
-            if (that.items1[that.result1].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result5].id == 'book') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][6] == 4) {
-            if (that.items1[that.result1].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result5].id == 'book') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result1].id == 'raa') 
-            valMatrix[6][6] += 1;
-          if (that.items2[that.result20].id == 'raa') 
-            valMatrix[6][6] += 1;
-          if (that.items3[that.result30].id == 'raa') 
-            valMatrix[6][6] += 1;
-          if (that.items4[that.result40].id == 'raa') 
-            valMatrix[6][6] += 1;
-          if (that.items5[that.result5].id == 'raa') 
-            valMatrix[6][6] += 1;
-
-          if (valMatrix[6][6] == 2) {   
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result20].id == 'raa'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][6] == 3) {
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][6] == 4) {
-            if (that.items1[that.result1].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result5].id == 'raa') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'esc') 
-            valMatrix[7][6] += 1;
-          if (that.items2[that.result20].id == 'esc') 
-            valMatrix[7][6] += 1;
-          if (that.items3[that.result30].id == 'esc') 
-            valMatrix[7][6] += 1;
-          if (that.items4[that.result40].id == 'esc') 
-            valMatrix[7][6] += 1;
-          if (that.items5[that.result5].id == 'esc') 
-            valMatrix[7][6] += 1;
-
-          if (valMatrix[7][6] == 2) {          
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result20].id == 'esc'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][6] == 3) {
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][6] == 4) {
-            if (that.items1[that.result1].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result5].id == 'esc') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'far') 
-            valMatrix[8][6] += 1;
-          if (that.items2[that.result20].id == 'far') 
-            valMatrix[8][6] += 1;
-          if (that.items3[that.result30].id == 'far') 
-            valMatrix[8][6] += 1;
-          if (that.items4[that.result40].id == 'far') 
-            valMatrix[8][6] += 1;
-          if (that.items5[that.result5].id == 'far') 
-            valMatrix[8][6] += 1;
-
-          if (valMatrix[8][6] == 2) {          
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result20].id == 'far'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][6] == 3) {
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][6] == 4) {
-            if (that.items1[that.result1].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result5].id == 'far') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result1].id == 'indi') 
-            valMatrix[9][6] += 1;
-          if (that.items2[that.result20].id == 'indi') 
-            valMatrix[9][6] += 1;
-          if (that.items3[that.result30].id == 'indi') 
-            valMatrix[9][6] += 1;
-          if (that.items4[that.result40].id == 'indi') 
-            valMatrix[9][6] += 1;
-          if (that.items5[that.result5].id == 'indi') 
-            valMatrix[9][6] += 1;
-
-          if (valMatrix[9][6] == 2) {          
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result20].id == 'indi'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][6] == 3) {
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][6] == 4) {
-            if (that.items1[that.result1].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi'){
-              document.getElementById("win71").style.visibility = "visible";
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result5].id == 'indi') {
-              document.getElementById("win72").style.visibility = "visible";
-              document.getElementById("win73").style.visibility = "visible";
-              document.getElementById("win74").style.visibility = "visible";
-              document.getElementById("win75").style.visibility = "visible";
-              document.getElementById("siete").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][6] == 5){
-            document.getElementById("siete").style.visibility = "visible";
-            document.getElementById("win71").style.visibility = "visible";
-            document.getElementById("win72").style.visibility = "visible";
-            document.getElementById("win73").style.visibility = "visible";
-            document.getElementById("win74").style.visibility = "visible";
-            document.getElementById("win75").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==8 && linesToWin<=3){
-          if (that.items1[that.result13].id == '1q') 
-            valMatrix[0][7] += 1;
-          if (that.items2[that.result23].id == '1q') 
-            valMatrix[0][7] += 1;
-          if (that.items3[that.result3].id == '1q') 
-            valMatrix[0][7] += 1;
-          if (that.items4[that.result40].id == '1q') 
-            valMatrix[0][7] += 1;
-          if (that.items5[that.result50].id == '1q') 
-            valMatrix[0][7] += 1;
-
-          if (valMatrix[0][7] == 3) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result3].id == '1q'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][7] == 4) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result40].id == '1q'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'a') 
-            valMatrix[1][7] += 1;
-          if (that.items2[that.result23].id == 'a') 
-            valMatrix[1][7] += 1;
-          if (that.items3[that.result3].id == 'a') 
-            valMatrix[1][7] += 1;
-          if (that.items4[that.result40].id == 'a') 
-            valMatrix[1][7] += 1;
-          if (that.items5[that.result50].id == 'a') 
-            valMatrix[1][7] += 1;
+              if (that.items1[that.result1].id == 'a')
+                valMatrix[1][6] += 1;
+              if (that.items2[that.result20].id == 'a')
+                valMatrix[1][6] += 1;
+              if (that.items3[that.result30].id == 'a')
+                valMatrix[1][6] += 1;
+              if (that.items4[that.result40].id == 'a')
+                valMatrix[1][6] += 1;
+              if (that.items5[that.result5].id == 'a')
+                valMatrix[1][6] += 1;
 
 
-          if (valMatrix[1][7] == 3) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result3].id == 'a'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][7] == 4) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result40].id == 'a'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-              document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][6] == 3) {
+                if (that.items1[that.result1].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result5].id == 'a') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][6] == 4) {
+                if (that.items1[that.result1].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'a' && that.items3[that.result30].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result5].id == 'a') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'k') 
-            valMatrix[2][7] += 1;
-          if (that.items2[that.result23].id == 'k') 
-            valMatrix[2][7] += 1;
-          if (that.items3[that.result3].id == 'k') 
-            valMatrix[2][7] += 1;
-          if (that.items4[that.result40].id == 'k') 
-            valMatrix[2][7] += 1;
-          if (that.items5[that.result50].id == 'k') 
-            valMatrix[2][7] += 1;
+              if (that.items1[that.result1].id == 'k')
+                valMatrix[2][6] += 1;
+              if (that.items2[that.result20].id == 'k')
+                valMatrix[2][6] += 1;
+              if (that.items3[that.result30].id == 'k')
+                valMatrix[2][6] += 1;
+              if (that.items4[that.result40].id == 'k')
+                valMatrix[2][6] += 1;
+              if (that.items5[that.result5].id == 'k')
+                valMatrix[2][6] += 1;
 
 
-          if (valMatrix[2][7] == 3) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result3].id == 'k'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][7] == 4) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result40].id == 'k'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
+              if (valMatrix[2][6] == 3) {
+                if (that.items1[that.result1].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result5].id == 'k') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][6] == 4) {
+                if (that.items1[that.result1].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'k' && that.items3[that.result30].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result5].id == 'k') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'q')
+                valMatrix[3][6] += 1;
+              if (that.items2[that.result20].id == 'q')
+                valMatrix[3][6] += 1;
+              if (that.items3[that.result30].id == 'q')
+                valMatrix[3][6] += 1;
+              if (that.items4[that.result40].id == 'q')
+                valMatrix[3][6] += 1;
+              if (that.items5[that.result5].id == 'q')
+                valMatrix[3][6] += 1;
+
+              if (valMatrix[3][6] == 3) {
+                if (that.items1[that.result1].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result5].id == 'q') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][6] == 4) {
+                if (that.items1[that.result1].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'q' && that.items3[that.result30].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result5].id == 'q') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'j')
+                valMatrix[4][6] += 1;
+              if (that.items2[that.result20].id == 'j')
+                valMatrix[4][6] += 1;
+              if (that.items3[that.result30].id == 'j')
+                valMatrix[4][6] += 1;
+              if (that.items4[that.result40].id == 'j')
+                valMatrix[4][6] += 1;
+              if (that.items5[that.result5].id == 'j')
+                valMatrix[4][6] += 1;
+
+              if (valMatrix[4][6] == 3) {
+                if (that.items1[that.result1].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result5].id == 'j') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][6] == 4) {
+                if (that.items1[that.result1].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'j' && that.items3[that.result30].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result5].id == 'j') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'book')
+                valMatrix[5][6] += 1;
+              if (that.items2[that.result20].id == 'book')
+                valMatrix[5][6] += 1;
+              if (that.items3[that.result30].id == 'book')
+                valMatrix[5][6] += 1;
+              if (that.items4[that.result40].id == 'book')
+                valMatrix[5][6] += 1;
+              if (that.items5[that.result5].id == 'book')
+                valMatrix[5][6] += 1;
+
+              if (valMatrix[5][6] == 3) {
+                if (that.items1[that.result1].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result5].id == 'book') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][6] == 4) {
+                if (that.items1[that.result1].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'book' && that.items3[that.result30].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result5].id == 'book') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result1].id == 'raa')
+                valMatrix[6][6] += 1;
+              if (that.items2[that.result20].id == 'raa')
+                valMatrix[6][6] += 1;
+              if (that.items3[that.result30].id == 'raa')
+                valMatrix[6][6] += 1;
+              if (that.items4[that.result40].id == 'raa')
+                valMatrix[6][6] += 1;
+              if (that.items5[that.result5].id == 'raa')
+                valMatrix[6][6] += 1;
+
+              if (valMatrix[6][6] == 2) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result20].id == 'raa') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][6] == 3) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][6] == 4) {
+                if (that.items1[that.result1].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'raa' && that.items3[that.result30].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result5].id == 'raa') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'esc')
+                valMatrix[7][6] += 1;
+              if (that.items2[that.result20].id == 'esc')
+                valMatrix[7][6] += 1;
+              if (that.items3[that.result30].id == 'esc')
+                valMatrix[7][6] += 1;
+              if (that.items4[that.result40].id == 'esc')
+                valMatrix[7][6] += 1;
+              if (that.items5[that.result5].id == 'esc')
+                valMatrix[7][6] += 1;
+
+              if (valMatrix[7][6] == 2) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result20].id == 'esc') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][6] == 3) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][6] == 4) {
+                if (that.items1[that.result1].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'esc' && that.items3[that.result30].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result5].id == 'esc') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'far')
+                valMatrix[8][6] += 1;
+              if (that.items2[that.result20].id == 'far')
+                valMatrix[8][6] += 1;
+              if (that.items3[that.result30].id == 'far')
+                valMatrix[8][6] += 1;
+              if (that.items4[that.result40].id == 'far')
+                valMatrix[8][6] += 1;
+              if (that.items5[that.result5].id == 'far')
+                valMatrix[8][6] += 1;
+
+              if (valMatrix[8][6] == 2) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result20].id == 'far') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][6] == 3) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][6] == 4) {
+                if (that.items1[that.result1].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'far' && that.items3[that.result30].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result5].id == 'far') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result1].id == 'indi')
+                valMatrix[9][6] += 1;
+              if (that.items2[that.result20].id == 'indi')
+                valMatrix[9][6] += 1;
+              if (that.items3[that.result30].id == 'indi')
+                valMatrix[9][6] += 1;
+              if (that.items4[that.result40].id == 'indi')
+                valMatrix[9][6] += 1;
+              if (that.items5[that.result5].id == 'indi')
+                valMatrix[9][6] += 1;
+
+              if (valMatrix[9][6] == 2) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result20].id == 'indi') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][6] == 3) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][6] == 4) {
+                if (that.items1[that.result1].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi') {
+                  document.getElementById("win71").style.visibility = "visible";
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'indi' && that.items3[that.result30].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result5].id == 'indi') {
+                  document.getElementById("win72").style.visibility = "visible";
+                  document.getElementById("win73").style.visibility = "visible";
+                  document.getElementById("win74").style.visibility = "visible";
+                  document.getElementById("win75").style.visibility = "visible";
+                  document.getElementById("siete").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][6] == 5) {
+                document.getElementById("siete").style.visibility = "visible";
+                document.getElementById("win71").style.visibility = "visible";
+                document.getElementById("win72").style.visibility = "visible";
+                document.getElementById("win73").style.visibility = "visible";
+                document.getElementById("win74").style.visibility = "visible";
+                document.getElementById("win75").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 8 && linesToWin <= 3) {
+              if (that.items1[that.result13].id == '1q')
+                valMatrix[0][7] += 1;
+              if (that.items2[that.result23].id == '1q')
+                valMatrix[0][7] += 1;
+              if (that.items3[that.result3].id == '1q')
+                valMatrix[0][7] += 1;
+              if (that.items4[that.result40].id == '1q')
+                valMatrix[0][7] += 1;
+              if (that.items5[that.result50].id == '1q')
+                valMatrix[0][7] += 1;
+
+              if (valMatrix[0][7] == 3) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result3].id == '1q') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][7] == 4) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result23].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result40].id == '1q') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result40].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
                 document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'q') 
-            valMatrix[3][7] += 1;
-          if (that.items2[that.result23].id == 'q') 
-            valMatrix[3][7] += 1;
-          if (that.items3[that.result3].id == 'q') 
-            valMatrix[3][7] += 1;
-          if (that.items4[that.result40].id == 'q') 
-            valMatrix[3][7] += 1;
-          if (that.items5[that.result50].id == 'q') 
-            valMatrix[3][7] += 1;
-
-          if (valMatrix[3][7] == 3) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result3].id == 'q'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][7] == 4) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result40].id == 'q'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'j') 
-            valMatrix[4][7] += 1;
-          if (that.items2[that.result23].id == 'j') 
-            valMatrix[4][7] += 1;
-          if (that.items3[that.result3].id == 'j') 
-            valMatrix[4][7] += 1;
-          if (that.items4[that.result40].id == 'j') 
-            valMatrix[4][7] += 1;
-          if (that.items5[that.result50].id == 'j') 
-            valMatrix[4][7] += 1;
-
-          if (valMatrix[4][7] == 3) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result3].id == 'j'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][7] == 4) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result40].id == 'j'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'book') 
-            valMatrix[5][7] += 1;
-          if (that.items2[that.result23].id == 'book') 
-            valMatrix[5][7] += 1;
-          if (that.items3[that.result3].id == 'book') 
-            valMatrix[5][7] += 1;
-          if (that.items4[that.result40].id == 'book') 
-            valMatrix[5][7] += 1;
-          if (that.items5[that.result50].id == 'book') 
-            valMatrix[5][7] += 1;
-
-          if (valMatrix[5][7] == 3) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result3].id == 'book'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][7] == 4) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result40].id == 'book'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result13].id == 'raa') 
-            valMatrix[6][7] += 1;
-          if (that.items2[that.result23].id == 'raa') 
-            valMatrix[6][7] += 1;
-          if (that.items3[that.result3].id == 'raa') 
-            valMatrix[6][7] += 1;
-          if (that.items4[that.result40].id == 'raa') 
-            valMatrix[6][7] += 1;
-          if (that.items5[that.result50].id == 'raa') 
-            valMatrix[6][7] += 1;
-
-          if (valMatrix[6][7] == 2) {   
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][7] == 3) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result3].id == 'raa'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][7] == 4) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result40].id == 'raa'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'esc') 
-            valMatrix[7][7] += 1;
-          if (that.items2[that.result23].id == 'esc') 
-            valMatrix[7][7] += 1;
-          if (that.items3[that.result3].id == 'esc') 
-            valMatrix[7][7] += 1;
-          if (that.items4[that.result40].id == 'esc') 
-            valMatrix[7][7] += 1;
-          if (that.items5[that.result50].id == 'esc') 
-            valMatrix[7][7] += 1;
-
-          if (valMatrix[7][7] == 2) {          
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][7] == 3) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result3].id == 'esc'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][7] == 4) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result40].id == 'esc'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'far') 
-            valMatrix[8][7] += 1;
-          if (that.items2[that.result23].id == 'far') 
-            valMatrix[8][7] += 1;
-          if (that.items3[that.result3].id == 'far') 
-            valMatrix[8][7] += 1;
-          if (that.items4[that.result40].id == 'far') 
-            valMatrix[8][7] += 1;
-          if (that.items5[that.result50].id == 'far') 
-            valMatrix[8][7] += 1;
-
-          if (valMatrix[8][7] == 2) {          
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][7] == 3) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result3].id == 'far'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][7] == 4) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result40].id == 'far'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'indi') 
-            valMatrix[9][7] += 1;
-          if (that.items2[that.result23].id == 'indi') 
-            valMatrix[9][7] += 1;
-          if (that.items3[that.result3].id == 'indi') 
-            valMatrix[9][7] += 1;
-          if (that.items4[that.result40].id == 'indi') 
-            valMatrix[9][7] += 1;
-          if (that.items5[that.result50].id == 'indi') 
-            valMatrix[9][7] += 1;
-
-          if (valMatrix[9][7] == 2) {          
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][7] == 3) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result3].id == 'indi'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][7] == 4) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result40].id == 'indi'){
-              document.getElementById("win81").style.visibility = "visible";
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result23].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win82").style.visibility = "visible";
-              document.getElementById("win83").style.visibility = "visible";
-              document.getElementById("win84").style.visibility = "visible";
-              document.getElementById("win85").style.visibility = "visible";
-              document.getElementById("ocho").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][7] == 5){
-            document.getElementById("ocho").style.visibility = "visible";
-            document.getElementById("win81").style.visibility = "visible";
-            document.getElementById("win82").style.visibility = "visible";
-            document.getElementById("win83").style.visibility = "visible";
-            document.getElementById("win84").style.visibility = "visible";
-            document.getElementById("win85").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==9 && linesToWin<=3){
-          if (that.items1[that.result10].id == '1q') 
-            valMatrix[0][8] += 1;
-          if (that.items2[that.result20].id == '1q') 
-            valMatrix[0][8] += 1;
-          if (that.items3[that.result3].id == '1q') 
-            valMatrix[0][8] += 1;
-          if (that.items4[that.result43].id == '1q') 
-            valMatrix[0][8] += 1;
-          if (that.items5[that.result53].id == '1q') 
-            valMatrix[0][8] += 1;
-
-          if (valMatrix[0][8] == 3) {
-            if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result3].id == '1q'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][8] == 4) {
-            if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result43].id == '1q'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'a') 
-            valMatrix[1][8] += 1;
-          if (that.items2[that.result20].id == 'a') 
-            valMatrix[1][8] += 1;
-          if (that.items3[that.result3].id == 'a') 
-            valMatrix[1][8] += 1;
-          if (that.items4[that.result43].id == 'a') 
-            valMatrix[1][8] += 1;
-          if (that.items5[that.result53].id == 'a') 
-            valMatrix[1][8] += 1;
+              if (that.items1[that.result13].id == 'a')
+                valMatrix[1][7] += 1;
+              if (that.items2[that.result23].id == 'a')
+                valMatrix[1][7] += 1;
+              if (that.items3[that.result3].id == 'a')
+                valMatrix[1][7] += 1;
+              if (that.items4[that.result40].id == 'a')
+                valMatrix[1][7] += 1;
+              if (that.items5[that.result50].id == 'a')
+                valMatrix[1][7] += 1;
 
 
-          if (valMatrix[1][8] == 3) {
-            if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result3].id == 'a'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][8] == 4) {
-            if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result43].id == 'a'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-              document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][7] == 3) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result3].id == 'a') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][7] == 4) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result23].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result40].id == 'a') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result40].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result10].id == 'k') 
-            valMatrix[2][8] += 1;
-          if (that.items2[that.result20].id == 'k') 
-            valMatrix[2][8] += 1;
-          if (that.items3[that.result3].id == 'k') 
-            valMatrix[2][8] += 1;
-          if (that.items4[that.result43].id == 'k') 
-            valMatrix[2][8] += 1;
-          if (that.items5[that.result53].id == 'k') 
-            valMatrix[2][8] += 1;
+              if (that.items1[that.result13].id == 'k')
+                valMatrix[2][7] += 1;
+              if (that.items2[that.result23].id == 'k')
+                valMatrix[2][7] += 1;
+              if (that.items3[that.result3].id == 'k')
+                valMatrix[2][7] += 1;
+              if (that.items4[that.result40].id == 'k')
+                valMatrix[2][7] += 1;
+              if (that.items5[that.result50].id == 'k')
+                valMatrix[2][7] += 1;
 
 
-          if (valMatrix[2][8] == 3) {
-            if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result3].id == 'k'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][8] == 4) {
-            if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result43].id == 'k'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
+              if (valMatrix[2][7] == 3) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result3].id == 'k') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][7] == 4) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result23].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result40].id == 'k') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result40].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'q')
+                valMatrix[3][7] += 1;
+              if (that.items2[that.result23].id == 'q')
+                valMatrix[3][7] += 1;
+              if (that.items3[that.result3].id == 'q')
+                valMatrix[3][7] += 1;
+              if (that.items4[that.result40].id == 'q')
+                valMatrix[3][7] += 1;
+              if (that.items5[that.result50].id == 'q')
+                valMatrix[3][7] += 1;
+
+              if (valMatrix[3][7] == 3) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result3].id == 'q') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][7] == 4) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result23].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result40].id == 'q') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result40].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'j')
+                valMatrix[4][7] += 1;
+              if (that.items2[that.result23].id == 'j')
+                valMatrix[4][7] += 1;
+              if (that.items3[that.result3].id == 'j')
+                valMatrix[4][7] += 1;
+              if (that.items4[that.result40].id == 'j')
+                valMatrix[4][7] += 1;
+              if (that.items5[that.result50].id == 'j')
+                valMatrix[4][7] += 1;
+
+              if (valMatrix[4][7] == 3) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result3].id == 'j') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][7] == 4) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result23].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result40].id == 'j') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result40].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'book')
+                valMatrix[5][7] += 1;
+              if (that.items2[that.result23].id == 'book')
+                valMatrix[5][7] += 1;
+              if (that.items3[that.result3].id == 'book')
+                valMatrix[5][7] += 1;
+              if (that.items4[that.result40].id == 'book')
+                valMatrix[5][7] += 1;
+              if (that.items5[that.result50].id == 'book')
+                valMatrix[5][7] += 1;
+
+              if (valMatrix[5][7] == 3) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result3].id == 'book') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][7] == 4) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result23].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result40].id == 'book') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result40].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result13].id == 'raa')
+                valMatrix[6][7] += 1;
+              if (that.items2[that.result23].id == 'raa')
+                valMatrix[6][7] += 1;
+              if (that.items3[that.result3].id == 'raa')
+                valMatrix[6][7] += 1;
+              if (that.items4[that.result40].id == 'raa')
+                valMatrix[6][7] += 1;
+              if (that.items5[that.result50].id == 'raa')
+                valMatrix[6][7] += 1;
+
+              if (valMatrix[6][7] == 2) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][7] == 3) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result3].id == 'raa') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][7] == 4) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result23].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result40].id == 'raa') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result40].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'esc')
+                valMatrix[7][7] += 1;
+              if (that.items2[that.result23].id == 'esc')
+                valMatrix[7][7] += 1;
+              if (that.items3[that.result3].id == 'esc')
+                valMatrix[7][7] += 1;
+              if (that.items4[that.result40].id == 'esc')
+                valMatrix[7][7] += 1;
+              if (that.items5[that.result50].id == 'esc')
+                valMatrix[7][7] += 1;
+
+              if (valMatrix[7][7] == 2) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][7] == 3) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result3].id == 'esc') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][7] == 4) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result23].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result40].id == 'esc') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result40].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'far')
+                valMatrix[8][7] += 1;
+              if (that.items2[that.result23].id == 'far')
+                valMatrix[8][7] += 1;
+              if (that.items3[that.result3].id == 'far')
+                valMatrix[8][7] += 1;
+              if (that.items4[that.result40].id == 'far')
+                valMatrix[8][7] += 1;
+              if (that.items5[that.result50].id == 'far')
+                valMatrix[8][7] += 1;
+
+              if (valMatrix[8][7] == 2) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][7] == 3) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result3].id == 'far') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][7] == 4) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result23].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result40].id == 'far') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result40].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'indi')
+                valMatrix[9][7] += 1;
+              if (that.items2[that.result23].id == 'indi')
+                valMatrix[9][7] += 1;
+              if (that.items3[that.result3].id == 'indi')
+                valMatrix[9][7] += 1;
+              if (that.items4[that.result40].id == 'indi')
+                valMatrix[9][7] += 1;
+              if (that.items5[that.result50].id == 'indi')
+                valMatrix[9][7] += 1;
+
+              if (valMatrix[9][7] == 2) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][7] == 3) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result3].id == 'indi') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][7] == 4) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result23].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result40].id == 'indi') {
+                  document.getElementById("win81").style.visibility = "visible";
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result23].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result40].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win82").style.visibility = "visible";
+                  document.getElementById("win83").style.visibility = "visible";
+                  document.getElementById("win84").style.visibility = "visible";
+                  document.getElementById("win85").style.visibility = "visible";
+                  document.getElementById("ocho").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][7] == 5) {
+                document.getElementById("ocho").style.visibility = "visible";
+                document.getElementById("win81").style.visibility = "visible";
+                document.getElementById("win82").style.visibility = "visible";
+                document.getElementById("win83").style.visibility = "visible";
+                document.getElementById("win84").style.visibility = "visible";
+                document.getElementById("win85").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 9 && linesToWin <= 3) {
+              if (that.items1[that.result10].id == '1q')
+                valMatrix[0][8] += 1;
+              if (that.items2[that.result20].id == '1q')
+                valMatrix[0][8] += 1;
+              if (that.items3[that.result3].id == '1q')
+                valMatrix[0][8] += 1;
+              if (that.items4[that.result43].id == '1q')
+                valMatrix[0][8] += 1;
+              if (that.items5[that.result53].id == '1q')
+                valMatrix[0][8] += 1;
+
+              if (valMatrix[0][8] == 3) {
+                if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result3].id == '1q') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][8] == 4) {
+                if (that.items1[that.result10].id == '1q' && that.items2[that.result20].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result43].id == '1q') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result43].id == '1q' && that.items5[that.result53].id == '1q') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
                 document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result10].id == 'q') 
-            valMatrix[3][8] += 1;
-          if (that.items2[that.result20].id == 'q') 
-            valMatrix[3][8] += 1;
-          if (that.items3[that.result3].id == 'q') 
-            valMatrix[3][8] += 1;
-          if (that.items4[that.result43].id == 'q') 
-            valMatrix[3][8] += 1;
-          if (that.items5[that.result53].id == 'q') 
-            valMatrix[3][8] += 1;
-
-          if (valMatrix[3][8] == 3) {
-            if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result3].id == 'q'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][8] == 4) {
-            if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result43].id == 'q'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'j') 
-            valMatrix[4][8] += 1;
-          if (that.items2[that.result20].id == 'j') 
-            valMatrix[4][8] += 1;
-          if (that.items3[that.result3].id == 'j') 
-            valMatrix[4][8] += 1;
-          if (that.items4[that.result43].id == 'j') 
-            valMatrix[4][8] += 1;
-          if (that.items5[that.result53].id == 'j') 
-            valMatrix[4][8] += 1;
-
-          if (valMatrix[4][8] == 3) {
-            if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result3].id == 'j'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][8] == 4) {
-            if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result43].id == 'j'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'book') 
-            valMatrix[5][8] += 1;
-          if (that.items2[that.result20].id == 'book') 
-            valMatrix[5][8] += 1;
-          if (that.items3[that.result3].id == 'book') 
-            valMatrix[5][8] += 1;
-          if (that.items4[that.result43].id == 'book') 
-            valMatrix[5][8] += 1;
-          if (that.items5[that.result53].id == 'book') 
-            valMatrix[5][8] += 1;
-
-          if (valMatrix[5][8] == 3) {
-            if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result3].id == 'book'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][8] == 4) {
-            if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result43].id == 'book'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
-          }
-
-          if (that.items1[that.result10].id == 'raa') 
-            valMatrix[6][8] += 1;
-          if (that.items2[that.result20].id == 'raa') 
-            valMatrix[6][8] += 1;
-          if (that.items3[that.result3].id == 'raa') 
-            valMatrix[6][8] += 1;
-          if (that.items4[that.result43].id == 'raa') 
-            valMatrix[6][8] += 1;
-          if (that.items5[that.result53].id == 'raa') 
-            valMatrix[6][8] += 1;
-
-          if (valMatrix[6][8] == 2) {   
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][8] == 3) {
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result3].id == 'raa'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][8] == 4) {
-            if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result43].id == 'raa'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'esc') 
-            valMatrix[7][8] += 1;
-          if (that.items2[that.result20].id == 'esc') 
-            valMatrix[7][8] += 1;
-          if (that.items3[that.result3].id == 'esc') 
-            valMatrix[7][8] += 1;
-          if (that.items4[that.result43].id == 'esc') 
-            valMatrix[7][8] += 1;
-          if (that.items5[that.result53].id == 'esc') 
-            valMatrix[7][8] += 1;
-
-          if (valMatrix[7][8] == 2) {          
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][8] == 3) {
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result3].id == 'esc'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][8] == 4) {
-            if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result43].id == 'esc'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'far') 
-            valMatrix[8][8] += 1;
-          if (that.items2[that.result20].id == 'far') 
-            valMatrix[8][8] += 1;
-          if (that.items3[that.result3].id == 'far') 
-            valMatrix[8][8] += 1;
-          if (that.items4[that.result43].id == 'far') 
-            valMatrix[8][8] += 1;
-          if (that.items5[that.result53].id == 'far') 
-            valMatrix[8][8] += 1;
-
-          if (valMatrix[8][8] == 2) {          
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][8] == 3) {
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result3].id == 'far'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][8] == 4) {
-            if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result43].id == 'far'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result10].id == 'indi') 
-            valMatrix[9][8] += 1;
-          if (that.items2[that.result20].id == 'indi') 
-            valMatrix[9][8] += 1;
-          if (that.items3[that.result3].id == 'indi') 
-            valMatrix[9][8] += 1;
-          if (that.items4[that.result43].id == 'indi') 
-            valMatrix[9][8] += 1;
-          if (that.items5[that.result53].id == 'indi') 
-            valMatrix[9][8] += 1;
-
-          if (valMatrix[9][8] == 2) {          
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][8] == 3) {
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result3].id == 'indi'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][8] == 4) {
-            if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result43].id == 'indi'){
-              document.getElementById("win91").style.visibility = "visible";
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result20].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
-              document.getElementById("win92").style.visibility = "visible";
-              document.getElementById("win93").style.visibility = "visible";
-              document.getElementById("win94").style.visibility = "visible";
-              document.getElementById("win95").style.visibility = "visible";
-              document.getElementById("nueve").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][8] == 5){
-            document.getElementById("nueve").style.visibility = "visible";
-            document.getElementById("win91").style.visibility = "visible";
-            document.getElementById("win92").style.visibility = "visible";
-            document.getElementById("win93").style.visibility = "visible";
-            document.getElementById("win94").style.visibility = "visible";
-            document.getElementById("win95").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-        }else if (i==10 && linesToWin<=3){
-          if (that.items1[that.result13].id == '1q') 
-            valMatrix[0][9] += 1;
-          if (that.items2[that.result2].id == '1q') 
-            valMatrix[0][9] += 1;
-          if (that.items3[that.result3].id == '1q') 
-            valMatrix[0][9] += 1;
-          if (that.items4[that.result4].id == '1q') 
-            valMatrix[0][9] += 1;
-          if (that.items5[that.result50].id == '1q') 
-            valMatrix[0][9] += 1;
-
-          if (valMatrix[0][9] == 3) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][9] == 4) {
-            if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[0][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
-
-          if (that.items1[that.result13].id == 'a') 
-            valMatrix[1][9] += 1;
-          if (that.items2[that.result2].id == 'a') 
-            valMatrix[1][9] += 1;
-          if (that.items3[that.result3].id == 'a') 
-            valMatrix[1][9] += 1;
-          if (that.items4[that.result4].id == 'a') 
-            valMatrix[1][9] += 1;
-          if (that.items5[that.result50].id == 'a') 
-            valMatrix[1][9] += 1;
+              if (that.items1[that.result10].id == 'a')
+                valMatrix[1][8] += 1;
+              if (that.items2[that.result20].id == 'a')
+                valMatrix[1][8] += 1;
+              if (that.items3[that.result3].id == 'a')
+                valMatrix[1][8] += 1;
+              if (that.items4[that.result43].id == 'a')
+                valMatrix[1][8] += 1;
+              if (that.items5[that.result53].id == 'a')
+                valMatrix[1][8] += 1;
 
 
-          if (valMatrix[1][9] == 3) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][9] == 4) {
-            if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[1][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-              document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+              if (valMatrix[1][8] == 3) {
+                if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result3].id == 'a') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][8] == 4) {
+                if (that.items1[that.result10].id == 'a' && that.items2[that.result20].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result43].id == 'a') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result43].id == 'a' && that.items5[that.result53].id == 'a') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
 
-          if (that.items1[that.result13].id == 'k') 
-            valMatrix[2][9] += 1;
-          if (that.items2[that.result2].id == 'k') 
-            valMatrix[2][9] += 1;
-          if (that.items3[that.result3].id == 'k') 
-            valMatrix[2][9] += 1;
-          if (that.items4[that.result4].id == 'k') 
-            valMatrix[2][9] += 1;
-          if (that.items5[that.result50].id == 'k') 
-            valMatrix[2][9] += 1;
+              if (that.items1[that.result10].id == 'k')
+                valMatrix[2][8] += 1;
+              if (that.items2[that.result20].id == 'k')
+                valMatrix[2][8] += 1;
+              if (that.items3[that.result3].id == 'k')
+                valMatrix[2][8] += 1;
+              if (that.items4[that.result43].id == 'k')
+                valMatrix[2][8] += 1;
+              if (that.items5[that.result53].id == 'k')
+                valMatrix[2][8] += 1;
 
 
-          if (valMatrix[2][9] == 3) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[2][9] == 4) {
-            if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
+              if (valMatrix[2][8] == 3) {
+                if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result3].id == 'k') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][8] == 4) {
+                if (that.items1[that.result10].id == 'k' && that.items2[that.result20].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result43].id == 'k') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result43].id == 'k' && that.items5[that.result53].id == 'k') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'q')
+                valMatrix[3][8] += 1;
+              if (that.items2[that.result20].id == 'q')
+                valMatrix[3][8] += 1;
+              if (that.items3[that.result3].id == 'q')
+                valMatrix[3][8] += 1;
+              if (that.items4[that.result43].id == 'q')
+                valMatrix[3][8] += 1;
+              if (that.items5[that.result53].id == 'q')
+                valMatrix[3][8] += 1;
+
+              if (valMatrix[3][8] == 3) {
+                if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result3].id == 'q') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][8] == 4) {
+                if (that.items1[that.result10].id == 'q' && that.items2[that.result20].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result43].id == 'q') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result43].id == 'q' && that.items5[that.result53].id == 'q') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'j')
+                valMatrix[4][8] += 1;
+              if (that.items2[that.result20].id == 'j')
+                valMatrix[4][8] += 1;
+              if (that.items3[that.result3].id == 'j')
+                valMatrix[4][8] += 1;
+              if (that.items4[that.result43].id == 'j')
+                valMatrix[4][8] += 1;
+              if (that.items5[that.result53].id == 'j')
+                valMatrix[4][8] += 1;
+
+              if (valMatrix[4][8] == 3) {
+                if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result3].id == 'j') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][8] == 4) {
+                if (that.items1[that.result10].id == 'j' && that.items2[that.result20].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result43].id == 'j') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result43].id == 'j' && that.items5[that.result53].id == 'j') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'book')
+                valMatrix[5][8] += 1;
+              if (that.items2[that.result20].id == 'book')
+                valMatrix[5][8] += 1;
+              if (that.items3[that.result3].id == 'book')
+                valMatrix[5][8] += 1;
+              if (that.items4[that.result43].id == 'book')
+                valMatrix[5][8] += 1;
+              if (that.items5[that.result53].id == 'book')
+                valMatrix[5][8] += 1;
+
+              if (valMatrix[5][8] == 3) {
+                if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result3].id == 'book') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][8] == 4) {
+                if (that.items1[that.result10].id == 'book' && that.items2[that.result20].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result43].id == 'book') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result43].id == 'book' && that.items5[that.result53].id == 'book') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result10].id == 'raa')
+                valMatrix[6][8] += 1;
+              if (that.items2[that.result20].id == 'raa')
+                valMatrix[6][8] += 1;
+              if (that.items3[that.result3].id == 'raa')
+                valMatrix[6][8] += 1;
+              if (that.items4[that.result43].id == 'raa')
+                valMatrix[6][8] += 1;
+              if (that.items5[that.result53].id == 'raa')
+                valMatrix[6][8] += 1;
+
+              if (valMatrix[6][8] == 2) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][8] == 3) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result3].id == 'raa') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][8] == 4) {
+                if (that.items1[that.result10].id == 'raa' && that.items2[that.result20].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result43].id == 'raa') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result43].id == 'raa' && that.items5[that.result53].id == 'raa') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'esc')
+                valMatrix[7][8] += 1;
+              if (that.items2[that.result20].id == 'esc')
+                valMatrix[7][8] += 1;
+              if (that.items3[that.result3].id == 'esc')
+                valMatrix[7][8] += 1;
+              if (that.items4[that.result43].id == 'esc')
+                valMatrix[7][8] += 1;
+              if (that.items5[that.result53].id == 'esc')
+                valMatrix[7][8] += 1;
+
+              if (valMatrix[7][8] == 2) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][8] == 3) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result3].id == 'esc') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][8] == 4) {
+                if (that.items1[that.result10].id == 'esc' && that.items2[that.result20].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result43].id == 'esc') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result43].id == 'esc' && that.items5[that.result53].id == 'esc') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'far')
+                valMatrix[8][8] += 1;
+              if (that.items2[that.result20].id == 'far')
+                valMatrix[8][8] += 1;
+              if (that.items3[that.result3].id == 'far')
+                valMatrix[8][8] += 1;
+              if (that.items4[that.result43].id == 'far')
+                valMatrix[8][8] += 1;
+              if (that.items5[that.result53].id == 'far')
+                valMatrix[8][8] += 1;
+
+              if (valMatrix[8][8] == 2) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][8] == 3) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result3].id == 'far') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][8] == 4) {
+                if (that.items1[that.result10].id == 'far' && that.items2[that.result20].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result43].id == 'far') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result43].id == 'far' && that.items5[that.result53].id == 'far') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result10].id == 'indi')
+                valMatrix[9][8] += 1;
+              if (that.items2[that.result20].id == 'indi')
+                valMatrix[9][8] += 1;
+              if (that.items3[that.result3].id == 'indi')
+                valMatrix[9][8] += 1;
+              if (that.items4[that.result43].id == 'indi')
+                valMatrix[9][8] += 1;
+              if (that.items5[that.result53].id == 'indi')
+                valMatrix[9][8] += 1;
+
+              if (valMatrix[9][8] == 2) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][8] == 3) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result3].id == 'indi') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][8] == 4) {
+                if (that.items1[that.result10].id == 'indi' && that.items2[that.result20].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result43].id == 'indi') {
+                  document.getElementById("win91").style.visibility = "visible";
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result20].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result43].id == 'indi' && that.items5[that.result53].id == 'indi') {
+                  document.getElementById("win92").style.visibility = "visible";
+                  document.getElementById("win93").style.visibility = "visible";
+                  document.getElementById("win94").style.visibility = "visible";
+                  document.getElementById("win95").style.visibility = "visible";
+                  document.getElementById("nueve").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][8] == 5) {
+                document.getElementById("nueve").style.visibility = "visible";
+                document.getElementById("win91").style.visibility = "visible";
+                document.getElementById("win92").style.visibility = "visible";
+                document.getElementById("win93").style.visibility = "visible";
+                document.getElementById("win94").style.visibility = "visible";
+                document.getElementById("win95").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+            } else if (i == 10 && linesToWin <= 3) {
+              if (that.items1[that.result13].id == '1q')
+                valMatrix[0][9] += 1;
+              if (that.items2[that.result2].id == '1q')
+                valMatrix[0][9] += 1;
+              if (that.items3[that.result3].id == '1q')
+                valMatrix[0][9] += 1;
+              if (that.items4[that.result4].id == '1q')
+                valMatrix[0][9] += 1;
+              if (that.items5[that.result50].id == '1q')
+                valMatrix[0][9] += 1;
+
+              if (valMatrix[0][9] == 3) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][9] == 4) {
+                if (that.items1[that.result13].id == '1q' && that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == '1q' && that.items3[that.result3].id == '1q' && that.items4[that.result4].id == '1q' && that.items5[that.result50].id == '1q') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[0][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
                 document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#ak4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'a')
+                valMatrix[1][9] += 1;
+              if (that.items2[that.result2].id == 'a')
+                valMatrix[1][9] += 1;
+              if (that.items3[that.result3].id == 'a')
+                valMatrix[1][9] += 1;
+              if (that.items4[that.result4].id == 'a')
+                valMatrix[1][9] += 1;
+              if (that.items5[that.result50].id == 'a')
+                valMatrix[1][9] += 1;
+
+
+              if (valMatrix[1][9] == 3) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][9] == 4) {
+                if (that.items1[that.result13].id == 'a' && that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'a' && that.items3[that.result3].id == 'a' && that.items4[that.result4].id == 'a' && that.items5[that.result50].id == 'a') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[1][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'k')
+                valMatrix[2][9] += 1;
+              if (that.items2[that.result2].id == 'k')
+                valMatrix[2][9] += 1;
+              if (that.items3[that.result3].id == 'k')
+                valMatrix[2][9] += 1;
+              if (that.items4[that.result4].id == 'k')
+                valMatrix[2][9] += 1;
+              if (that.items5[that.result50].id == 'k')
+                valMatrix[2][9] += 1;
+
+
+              if (valMatrix[2][9] == 3) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][9] == 4) {
+                if (that.items1[that.result13].id == 'k' && that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'k' && that.items3[that.result3].id == 'k' && that.items4[that.result4].id == 'k' && that.items5[that.result50].id == 'k') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#ak4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[2][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#ak5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'q')
+                valMatrix[3][9] += 1;
+              if (that.items2[that.result2].id == 'q')
+                valMatrix[3][9] += 1;
+              if (that.items3[that.result3].id == 'q')
+                valMatrix[3][9] += 1;
+              if (that.items4[that.result4].id == 'q')
+                valMatrix[3][9] += 1;
+              if (that.items5[that.result50].id == 'q')
+                valMatrix[3][9] += 1;
+
+              if (valMatrix[3][9] == 3) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][9] == 4) {
+                if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[3][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'j')
+                valMatrix[4][9] += 1;
+              if (that.items2[that.result2].id == 'j')
+                valMatrix[4][9] += 1;
+              if (that.items3[that.result3].id == 'j')
+                valMatrix[4][9] += 1;
+              if (that.items4[that.result4].id == 'j')
+                valMatrix[4][9] += 1;
+              if (that.items5[that.result50].id == 'j')
+                valMatrix[4][9] += 1;
+
+              if (valMatrix[4][9] == 3) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][9] == 4) {
+                if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#1qqj4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[4][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#1qqj5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'book')
+                valMatrix[5][9] += 1;
+              if (that.items2[that.result2].id == 'book')
+                valMatrix[5][9] += 1;
+              if (that.items3[that.result3].id == 'book')
+                valMatrix[5][9] += 1;
+              if (that.items4[that.result4].id == 'book')
+                valMatrix[5][9] += 1;
+              if (that.items5[that.result50].id == 'book')
+                valMatrix[5][9] += 1;
+
+              if (valMatrix[5][9] == 3) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#book3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][9] == 4) {
+                if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#book4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[5][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#book5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+                document.getElementById("jackpot").style.visibility = "visible";
+                $.get("http://casino.local/winJackpot", function (data) {
+                  //alert("Guardado exitoso");              
+                }).fail(function () {
+                  //alert("Error al guardar");
+                });
+              }
+
+              if (that.items1[that.result13].id == 'raa')
+                valMatrix[6][9] += 1;
+              if (that.items2[that.result2].id == 'raa')
+                valMatrix[6][9] += 1;
+              if (that.items3[that.result3].id == 'raa')
+                valMatrix[6][9] += 1;
+              if (that.items4[that.result4].id == 'raa')
+                valMatrix[6][9] += 1;
+              if (that.items5[that.result50].id == 'raa')
+                valMatrix[6][9] += 1;
+
+              if (valMatrix[6][9] == 2) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#raa2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][9] == 3) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#raa3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][9] == 4) {
+                if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#raa4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[6][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#raa5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'esc')
+                valMatrix[7][9] += 1;
+              if (that.items2[that.result2].id == 'esc')
+                valMatrix[7][9] += 1;
+              if (that.items3[that.result3].id == 'esc')
+                valMatrix[7][9] += 1;
+              if (that.items4[that.result4].id == 'esc')
+                valMatrix[7][9] += 1;
+              if (that.items5[that.result50].id == 'esc')
+                valMatrix[7][9] += 1;
+
+              if (valMatrix[7][9] == 2) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#esc2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][9] == 3) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#esc3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][9] == 4) {
+                if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#esc4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[7][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#esc5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'far')
+                valMatrix[8][9] += 1;
+              if (that.items2[that.result2].id == 'far')
+                valMatrix[8][9] += 1;
+              if (that.items3[that.result3].id == 'far')
+                valMatrix[8][9] += 1;
+              if (that.items4[that.result4].id == 'far')
+                valMatrix[8][9] += 1;
+              if (that.items5[that.result50].id == 'far')
+                valMatrix[8][9] += 1;
+
+              if (valMatrix[8][9] == 2) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#far2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][9] == 3) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#far3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][9] == 4) {
+                if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#far4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[8][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#far5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
+
+              if (that.items1[that.result13].id == 'indi')
+                valMatrix[9][9] += 1;
+              if (that.items2[that.result2].id == 'indi')
+                valMatrix[9][9] += 1;
+              if (that.items3[that.result3].id == 'indi')
+                valMatrix[9][9] += 1;
+              if (that.items4[that.result4].id == 'indi')
+                valMatrix[9][9] += 1;
+              if (that.items5[that.result50].id == 'indi')
+                valMatrix[9][9] += 1;
+
+              if (valMatrix[9][9] == 2) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#indi2x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][9] == 3) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#indi3x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][9] == 4) {
+                if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi') {
+                  document.getElementById("win101").style.visibility = "visible";
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                } else if (that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
+                  document.getElementById("win102").style.visibility = "visible";
+                  document.getElementById("win103").style.visibility = "visible";
+                  document.getElementById("win104").style.visibility = "visible";
+                  document.getElementById("win105").style.visibility = "visible";
+                  document.getElementById("diez").style.visibility = "visible";
+                  ec += parseInt($('#indi4x').text()) * parseInt($('#bet').text());
+                  linesToWin += 1;
+                }
+              } else if (valMatrix[9][9] == 5) {
+                document.getElementById("diez").style.visibility = "visible";
+                document.getElementById("win101").style.visibility = "visible";
+                document.getElementById("win102").style.visibility = "visible";
+                document.getElementById("win103").style.visibility = "visible";
+                document.getElementById("win104").style.visibility = "visible";
+                document.getElementById("win105").style.visibility = "visible";
+                ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
+                linesToWin += 1;
+              }
             }
-          }else if (valMatrix[2][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#ak5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
           }
 
-          if (that.items1[that.result13].id == 'q') 
-            valMatrix[3][9] += 1;
-          if (that.items2[that.result2].id == 'q') 
-            valMatrix[3][9] += 1;
-          if (that.items3[that.result3].id == 'q') 
-            valMatrix[3][9] += 1;
-          if (that.items4[that.result4].id == 'q') 
-            valMatrix[3][9] += 1;
-          if (that.items5[that.result50].id == 'q') 
-            valMatrix[3][9] += 1;
 
-          if (valMatrix[3][9] == 3) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][9] == 4) {
-            if (that.items1[that.result13].id == 'q' && that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'q' && that.items3[that.result3].id == 'q' && that.items4[that.result4].id == 'q' && that.items5[that.result50].id == 'q') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[3][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+          console.log("Credits:    " + ec);
+          $('#messages').text("Usted gano: " + ec + " creditos");
+
+          var books = 0;
+
+          if (that.items1[that.result10].id == 'book' || that.items1[that.result1].id == 'book' || that.items1[that.result13].id == 'book')
+            books += 1;
+          if (that.items2[that.result20].id == 'book' || that.items2[that.result2].id == 'book' || that.items2[that.result23].id == 'book')
+            books += 1;
+          if (that.items3[that.result30].id == 'book' || that.items3[that.result3].id == 'book' || that.items3[that.result33].id == 'book')
+            books += 1;
+          if (that.items4[that.result40].id == 'book' || that.items4[that.result4].id == 'book' || that.items4[that.result43].id == 'book')
+            books += 1;
+          if (that.items5[that.result50].id == 'book' || that.items5[that.result5].id == 'book' || that.items5[that.result53].id == 'book')
+            books += 1;
+
+          console.log(free);
+          controlImg = 0;
+
+          if ((books == 4) && !free) {
+
+            freeGames = 0;
+            //$('div.win').children().css("visibility","hidden");
+            //$('div#lines').children().css("visibility", "hidden");
+            console.log("Books: " + books);
+            free = true;
+            itemRand = Math.floor(Math.random() * 9) + 1;
+            console.log(itemRand);
+            if (itemRand == 1)
+              imageRand = "1q";
+            if (itemRand == 2)
+              imageRand = "esc";
+            if (itemRand == 3)
+              imageRand = "far";
+            if (itemRand == 4)
+              imageRand = "indi";
+            if (itemRand == 5)
+              imageRand = "j";
+            if (itemRand == 6)
+              imageRand = "k";
+            if (itemRand == 7)
+              imageRand = "q";
+            if (itemRand == 8)
+              imageRand = "raa";
+            if (itemRand == 9)
+              imageRand = "a";
+
+            console.log(imageRand);
+            alert("Tiene 10 juegos gratis y su imagen de bonus es: " + imageRand);
           }
 
-          if (that.items1[that.result13].id == 'j') 
-            valMatrix[4][9] += 1;
-          if (that.items2[that.result2].id == 'j') 
-            valMatrix[4][9] += 1;
-          if (that.items3[that.result3].id == 'j') 
-            valMatrix[4][9] += 1;
-          if (that.items4[that.result4].id == 'j') 
-            valMatrix[4][9] += 1;
-          if (that.items5[that.result50].id == 'j') 
-            valMatrix[4][9] += 1;
-
-          if (valMatrix[4][9] == 3) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][9] == 4) {
-            if (that.items1[that.result13].id == 'j' && that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'j' && that.items3[that.result3].id == 'j' && that.items4[that.result4].id == 'j' && that.items5[that.result50].id == 'j') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#1qqj4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[4][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#1qqj5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
+          if (free) {
+            console.log(imageRand);
+            if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand)
+              controlImg += 1;
+            if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand)
+              controlImg += 1;
+            if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand)
+              controlImg += 1;
+            if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand)
+              controlImg += 1;
+            if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand)
+              controlImg += 1;
+            playing = true;
           }
 
-          if (that.items1[that.result13].id == 'book') 
-            valMatrix[5][9] += 1;
-          if (that.items2[that.result2].id == 'book') 
-            valMatrix[5][9] += 1;
-          if (that.items3[that.result3].id == 'book') 
-            valMatrix[5][9] += 1;
-          if (that.items4[that.result4].id == 'book') 
-            valMatrix[5][9] += 1;
-          if (that.items5[that.result50].id == 'book') 
-            valMatrix[5][9] += 1;
-
-          if (valMatrix[5][9] == 3) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#book3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][9] == 4) {
-            if (that.items1[that.result13].id == 'book' && that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'book' && that.items3[that.result3].id == 'book' && that.items4[that.result4].id == 'book' && that.items5[that.result50].id == 'book') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#book4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[5][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#book5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            document.getElementById("jackpot").style.visibility = "visible";
-            $.get("http://192.168.1.109:8000/winJackpot", function (data){
-                //alert("Guardado exitoso");              
-            }).fail(function() {
-                //alert("Error al guardar");
-            });
+          if (free && controlImg > 3 && freeGames > 0) {
+            console.log("AQUI CONI");
+            playing = false;
           }
 
-          if (that.items1[that.result13].id == 'raa') 
-            valMatrix[6][9] += 1;
-          if (that.items2[that.result2].id == 'raa') 
-            valMatrix[6][9] += 1;
-          if (that.items3[that.result3].id == 'raa') 
-            valMatrix[6][9] += 1;
-          if (that.items4[that.result4].id == 'raa') 
-            valMatrix[6][9] += 1;
-          if (that.items5[that.result50].id == 'raa') 
-            valMatrix[6][9] += 1;
+          setTimeout(function () {
 
-          if (valMatrix[6][9] == 2) {   
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#raa2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][9] == 3) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#raa3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[6][9] == 4) {
-            if (that.items1[that.result13].id == 'raa' && that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'raa' && that.items3[that.result3].id == 'raa' && that.items4[that.result4].id == 'raa' && that.items5[that.result50].id == 'raa') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#raa4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }
-          }else if (valMatrix[6][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#raa5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+            if (free && freeGames != -1)
+              freeGames += 1;
+            if (freeGames == -1)
+              freeGames = 0;
+            if (free && controlImg >= 3 && freeGames > 0) {
+              playing = true;
+              $('div.win').children().css("visibility", "hidden");
+              $('div#lines').children().css("visibility", "hidden");
+              $('#sombra').css("visibility", "visible");
+              noWinImages();
+              $('.noWinImg1').css("visibility", "hidden");
+              $('#canvas1').css("visibility", "visible");
+              $('.noWinImg2').css("visibility", "hidden");
+              $('#canvas2').css("visibility", "visible");
+              $('.noWinImg3').css("visibility", "hidden");
+              $('#canvas3').css("visibility", "visible");
+              $('.noWinImg4').css("visibility", "hidden");
+              $('#canvas4').css("visibility", "visible");
+              $('.noWinImg5').css("visibility", "hidden");
+              $('#canvas5').css("visibility", "visible");
+              switch (itemRand) {
+                case 1:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
 
-          if (that.items1[that.result13].id == 'esc') 
-            valMatrix[7][9] += 1;
-          if (that.items2[that.result2].id == 'esc') 
-            valMatrix[7][9] += 1;
-          if (that.items3[that.result3].id == 'esc') 
-            valMatrix[7][9] += 1;
-          if (that.items4[that.result4].id == 'esc') 
-            valMatrix[7][9] += 1;
-          if (that.items5[that.result50].id == 'esc') 
-            valMatrix[7][9] += 1;
+                    $('.bonusImg').attr("src", "img/Alcatraz/1q.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#1qqj3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#1qqj4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#1qqj5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
 
-          if (valMatrix[7][9] == 2) {          
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#esc2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][9] == 3) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#esc3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][9] == 4) {
-            if (that.items1[that.result13].id == 'esc' && that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'esc' && that.items3[that.result3].id == 'esc' && that.items4[that.result4].id == 'esc' && that.items5[that.result50].id == 'esc') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#esc4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[7][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#esc5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
 
-          if (that.items1[that.result13].id == 'far') 
-            valMatrix[8][9] += 1;
-          if (that.items2[that.result2].id == 'far') 
-            valMatrix[8][9] += 1;
-          if (that.items3[that.result3].id == 'far') 
-            valMatrix[8][9] += 1;
-          if (that.items4[that.result4].id == 'far') 
-            valMatrix[8][9] += 1;
-          if (that.items5[that.result50].id == 'far') 
-            valMatrix[8][9] += 1;
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
 
-          if (valMatrix[8][9] == 2) {          
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#far2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][9] == 3) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#far3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][9] == 4) {
-            if (that.items1[that.result13].id == 'far' && that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'far' && that.items3[that.result3].id == 'far' && that.items4[that.result4].id == 'far' && that.items5[that.result50].id == 'far') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#far4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[8][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#far5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
 
-          if (that.items1[that.result13].id == 'indi') 
-            valMatrix[9][9] += 1;
-          if (that.items2[that.result2].id == 'indi') 
-            valMatrix[9][9] += 1;
-          if (that.items3[that.result3].id == 'indi') 
-            valMatrix[9][9] += 1;
-          if (that.items4[that.result4].id == 'indi') 
-            valMatrix[9][9] += 1;
-          if (that.items5[that.result50].id == 'indi') 
-            valMatrix[9][9] += 1;
+                    }, 200);
+                  }
+                  break;
+                case 2:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
 
-          if (valMatrix[9][9] == 2) {          
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#indi2x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
+                    $('.bonusImg').attr("src", "img/Alcatraz/esc.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#esc3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#esc3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#esc4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#esc4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#esc5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#esc5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 3:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/a.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#ak3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#ak4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#ak5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 4:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/indi.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#indi3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#indi3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#indi4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#indi4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#indi5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#indi5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 5:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/j.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#1qqj3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#1qqj4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#1qqj5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 6:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/k.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#ak3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#ak4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#ak5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 7:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/q.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#1qqj3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#1qqj4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#1qqj5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#1qqj5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 8:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/raa.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#raa3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#raa3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#raa4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#raa4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#raa5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#raa5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+                case 9:
+                  console.log(controlImg);
+                  if (controlImg >= 3) {
+                    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand) {
+                      document.getElementById("bonus11").style.visibility = "visible";
+                      document.getElementById("bonus21").style.visibility = "visible";
+                      document.getElementById("bonus31").style.visibility = "visible";
+                    }
+                    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand) {
+                      document.getElementById("bonus12").style.visibility = "visible";
+                      document.getElementById("bonus22").style.visibility = "visible";
+                      document.getElementById("bonus32").style.visibility = "visible";
+                    }
+                    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand) {
+                      document.getElementById("bonus13").style.visibility = "visible";
+                      document.getElementById("bonus23").style.visibility = "visible";
+                      document.getElementById("bonus33").style.visibility = "visible";
+                    }
+                    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand) {
+                      document.getElementById("bonus14").style.visibility = "visible";
+                      document.getElementById("bonus24").style.visibility = "visible";
+                      document.getElementById("bonus34").style.visibility = "visible";
+                    }
+                    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand) {
+                      document.getElementById("bonus15").style.visibility = "visible";
+                      document.getElementById("bonus25").style.visibility = "visible";
+                      document.getElementById("bonus35").style.visibility = "visible";
+                    }
+
+                    $('.bonusImg').attr("src", "img/Alcatraz/a.png");
+                    $("#lines").children().css("z-index", 9999999);
+                    var i = 0;
+                    if (controlImg == 3) {
+                      ec += (parseInt($('#ak3x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak3x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 4) {
+                      ec += (parseInt($('#ak4x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak4x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    } else if (controlImg == 5) {
+                      ec += (parseInt($('#ak5x').text()) * parseInt($('#bet').text())) * 10;
+                      var minBonus = (parseInt($('#ak5x').text()) * parseInt($('#bet').text())) * 10;
+                      $('#messages').text("Usted gano: " + minBonus + " creditos de bonus");
+                    }
+
+                    if (ec != 0) {
+                      gamble = 0;
+                      playing = true;
+                      $('#play').text("Colectar");
+                    } else {
+                      $('div.button').addClass("button-default");
+                      $('div.button').removeClass("button-disable");
+                      $('#gambleBtn').toggleClass("button-disable button-default");
+                      $('#messages').text("Por favor realice su apuesta");
+                      gamble = 2;
+                      ec += parseInt($('#credits').text());
+                      var monto_max = 0;
+                      datos = {
+                        user: userID,
+                        val: ec
+                      };
+                      $.get("http://casino.local/save_credits/" + datos.user + "/" + datos.val, function (data) {
+                        //alert("Guardado exitoso");
+                        monto_max = data.monto_max;
+
+
+                        if (datos.val > monto_max) {
+                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
+                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                            window.history.back();
+                          }).fail(function () {
+                          });
+                        }
+                        ;
+
+                      }).fail(function () {
+                        //alert("Error al guardar");
+                      });
+                      ec = 0;
+                      playing = false;
+                    }
+
+                    interval = setInterval(function () {
+                      if (i == 1) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("uno").style.visibility = "visible";
+                      } else if (i == 2) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("dos").style.visibility = "visible";
+                      } else if (i == 3) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("tres").style.visibility = "visible";
+                      } else if (i == 4) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cuatro").style.visibility = "visible";
+                      } else if (i == 5) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("cinco").style.visibility = "visible";
+                      } else if (i == 6) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("seis").style.visibility = "visible";
+                      } else if (i == 7) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("siete").style.visibility = "visible";
+                      } else if (i == 8) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("ocho").style.visibility = "visible";
+                      } else if (i == 9) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("nueve").style.visibility = "visible";
+                      } else if (i == 10) {
+                        $('div#lines').children().css("visibility", "hidden");
+                        document.getElementById("diez").style.visibility = "visible";
+                      }
+                      i++
+                      if (i > 12) {
+                        $('div.bonus').children().css("visibility", "hidden");
+                        $('div#lines').children().css("visibility", "hidden");
+                        clearInterval(interval);
+                      }
+
+                    }, 200);
+                  }
+                  break;
+              }
+
+              $('#sombra').css("visibility", "hidden");
+
+
+              if (freeGames == 9) {
+                alert("Se terminaron los juegos gratis!");
+                freeGames = 0;
+                free = false;
+              }
+              console.log("freeGames: " + freeGames);
             }
-          }else if (valMatrix[9][9] == 3) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#indi3x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][9] == 4) {
-            if (that.items1[that.result13].id == 'indi' && that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi'){
-              document.getElementById("win101").style.visibility = "visible";
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }else if (that.items2[that.result2].id == 'indi' && that.items3[that.result3].id == 'indi' && that.items4[that.result4].id == 'indi' && that.items5[that.result50].id == 'indi') {
-              document.getElementById("win102").style.visibility = "visible";
-              document.getElementById("win103").style.visibility = "visible";
-              document.getElementById("win104").style.visibility = "visible";
-              document.getElementById("win105").style.visibility = "visible";
-              document.getElementById("diez").style.visibility = "visible";
-              ec += parseInt($('#indi4x').text())*parseInt($('#bet').text());
-              linesToWin+=1;
-            }
-          }else if (valMatrix[9][9] == 5){
-            document.getElementById("diez").style.visibility = "visible";
-            document.getElementById("win101").style.visibility = "visible";
-            document.getElementById("win102").style.visibility = "visible";
-            document.getElementById("win103").style.visibility = "visible";
-            document.getElementById("win104").style.visibility = "visible";
-            document.getElementById("win105").style.visibility = "visible";
-            ec += parseInt($('#indi5x').text())*parseInt($('#bet').text());
-            linesToWin+=1;
-          }
+          }, 1000);
+
         }
-      }
-    }
-
-  console.log("Credits:    "+ec);
-  $('#messages').text("Usted gano: "+ec+" creditos");
-
-  var books = 0;
-
-  if (that.items1[that.result10].id == 'book' || that.items1[that.result1].id == 'book' || that.items1[that.result13].id == 'book')
-    books+=1;
-  if (that.items2[that.result20].id == 'book' || that.items2[that.result2].id == 'book' || that.items2[that.result23].id == 'book')
-    books+=1;
-  if (that.items3[that.result30].id == 'book' || that.items3[that.result3].id == 'book' || that.items3[that.result33].id == 'book')
-    books+=1;
-  if (that.items4[that.result40].id == 'book' || that.items4[that.result4].id == 'book' || that.items4[that.result43].id == 'book')
-    books+=1;
-  if (that.items5[that.result50].id == 'book' || that.items5[that.result5].id == 'book' || that.items5[that.result53].id == 'book')
-    books+=1;
-  
-  console.log(free);
-  controlImg=0;
-
-  if ((books==4) && !free) {
-    
-    freeGames = 0;
-    //$('div.win').children().css("visibility","hidden");
-    //$('div#lines').children().css("visibility", "hidden");
-    console.log("Books: "+books);
-    free = true;
-    itemRand = Math.floor(Math.random() * 9) + 1;
-    console.log(itemRand);
-    if (itemRand==1)
-      imageRand = "1q";
-    if (itemRand==2)
-      imageRand = "esc";
-    if (itemRand==3)
-      imageRand = "far";
-    if (itemRand==4)
-      imageRand = "indi";
-    if (itemRand==5)
-      imageRand = "j";
-    if (itemRand==6)
-      imageRand = "k";
-    if (itemRand==7)
-      imageRand = "q";
-    if (itemRand==8)
-      imageRand = "raa";
-    if (itemRand==9)
-      imageRand = "a";
-
-    console.log(imageRand);
-    alert("Tiene 10 juegos gratis y su imagen de bonus es: "+imageRand);
-  }
-
-  if (free) {
-    console.log(imageRand);
-    if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand)
-      controlImg+=1;
-    if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand)
-      controlImg+=1;
-    if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand)
-      controlImg+=1;
-    if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand)
-      controlImg+=1;
-    if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand)
-      controlImg+=1;
-    playing=true;
-  }
-
-  if (free && controlImg>3 && freeGames>0) {
-    console.log("AQUI CONI");
-    playing=false;
-  }
-
-  setTimeout(function(){
-
-    if (free && freeGames!=-1)
-      freeGames+=1;
-    if (freeGames==-1)
-      freeGames=0;
-    if (free && controlImg>=3 && freeGames>0) {
-      playing=true;
-      $('div.win').children().css("visibility","hidden");
-      $('div#lines').children().css("visibility", "hidden");
-      $('#sombra').css("visibility", "visible");
-      if (percent) {
-        noWinImages();
-        $('.noWinImg1').css("visibility","hidden");
-        $('#canvas1').css("visibility","visible");
-        $('.noWinImg2').css("visibility","hidden");
-        $('#canvas2').css("visibility","visible");
-        $('.noWinImg3').css("visibility","hidden");
-        $('#canvas3').css("visibility","visible");
-        $('.noWinImg4').css("visibility","hidden");
-        $('#canvas4').css("visibility","visible");
-        $('.noWinImg5').css("visibility","hidden");
-        $('#canvas5').css("visibility","visible");
-        switch(itemRand){
-          case 1:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              console.log("POAQUI");
-              $('.bonusImg').attr("src","img/Alcatraz/1q.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#1qqj3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#1qqj4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#1qqj5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 2:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/esc.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#esc3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#esc3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#esc4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#esc4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#esc5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#esc5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 3:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/a.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#ak3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#ak4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#ak5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 4:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/indi.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#indi3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#indi3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#indi4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#indi4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#indi5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#indi5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 5:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/j.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#1qqj3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#1qqj4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#1qqj5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 6:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/k.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#ak3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#ak4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#ak5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 7:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/q.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#1qqj3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#1qqj4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#1qqj5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#1qqj5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 8:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/raa.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#raa3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#raa3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#raa4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#raa4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#raa5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#raa5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-          case 9:
-            console.log(controlImg);
-            if (controlImg>=3) {
-              if (that.items1[that.result10].id == imageRand || that.items1[that.result1].id == imageRand || that.items1[that.result13].id == imageRand){
-                document.getElementById("bonus11").style.visibility = "visible";
-                document.getElementById("bonus21").style.visibility = "visible";
-                document.getElementById("bonus31").style.visibility = "visible";
-              }if (that.items2[that.result20].id == imageRand || that.items2[that.result2].id == imageRand || that.items2[that.result23].id == imageRand){
-                document.getElementById("bonus12").style.visibility = "visible";
-                document.getElementById("bonus22").style.visibility = "visible";
-                document.getElementById("bonus32").style.visibility = "visible";
-              }if (that.items3[that.result30].id == imageRand || that.items3[that.result3].id == imageRand || that.items3[that.result33].id == imageRand){
-                document.getElementById("bonus13").style.visibility = "visible";
-                document.getElementById("bonus23").style.visibility = "visible";
-                document.getElementById("bonus33").style.visibility = "visible";
-              }if (that.items4[that.result40].id == imageRand || that.items4[that.result4].id == imageRand || that.items4[that.result43].id == imageRand){
-                document.getElementById("bonus14").style.visibility = "visible";
-                document.getElementById("bonus24").style.visibility = "visible";
-                document.getElementById("bonus34").style.visibility = "visible";
-              }if (that.items5[that.result50].id == imageRand || that.items5[that.result5].id == imageRand || that.items5[that.result53].id == imageRand){
-                document.getElementById("bonus15").style.visibility = "visible";
-                document.getElementById("bonus25").style.visibility = "visible";
-                document.getElementById("bonus35").style.visibility = "visible";
-              }
-              
-              $('.bonusImg').attr("src","img/Alcatraz/a.png");
-              $("#lines").children().css("z-index",9999999);
-              var i = 0;
-              if (controlImg == 3) {
-                ec += (parseInt($('#ak3x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak3x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 4) {
-               ec += (parseInt($('#ak4x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak4x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }else if (controlImg == 5) {
-               ec += (parseInt($('#ak5x').text())*parseInt($('#bet').text()))*10;
-                var minBonus = (parseInt($('#ak5x').text())*parseInt($('#bet').text()))*10;
-                $('#messages').text("Usted gano: "+minBonus+" creditos de bonus");
-              }
-
-              if (ec!=0) {
-                gamble=0;
-                playing=true;
-                $('#play').text("Colectar");
-              }else{
-                $('div.button').addClass("button-default");
-                  $('div.button').removeClass("button-disable");
-                  $('#gambleBtn').toggleClass("button-disable button-default");
-                  $('#messages').text("Por favor realice su apuesta");
-                  gamble = 2;
-                  ec += parseInt($('#credits').text());
-                  var monto_max=0;
-                  datos = {
-                      user :userID,
-                      val  :ec
-                  };
-                  $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
-                        //alert("Guardado exitoso");
-                        monto_max = data.monto_max;
-                        
-
-                        if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
-                              window.history.back();
-                          }).fail(function () {
-                          });
-                        };
-                        
-                    }).fail(function() {
-                        //alert("Error al guardar");
-                    });
-                  ec = 0;
-                  playing=false;
-              }
-
-              interval = setInterval(function(){
-                  if (i==1) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("uno").style.visibility = "visible";
-                  }else if (i==2) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("dos").style.visibility = "visible";
-                  }else if (i==3) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("tres").style.visibility = "visible";
-                  }else if (i==4) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cuatro").style.visibility = "visible";
-                  }else if (i==5) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("cinco").style.visibility = "visible";
-                  }else if (i==6) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("seis").style.visibility = "visible";
-                  }else if (i==7) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("siete").style.visibility = "visible";
-                  }else if (i==8) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("ocho").style.visibility = "visible";
-                  }else if (i==9) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("nueve").style.visibility = "visible";
-                  }else if (i==10) {
-                    $('div#lines').children().css("visibility", "hidden");
-                    document.getElementById("diez").style.visibility = "visible";
-                  }
-                i++
-                if (i>12) {
-                  $('div.bonus').children().css("visibility", "hidden");
-                  $('div#lines').children().css("visibility", "hidden");
-                  clearInterval(interval);
-                }
-
-              },200);
-            }
-            break;
-        }
-      
-        $('#sombra').css("visibility", "hidden");
-      }
-    }
-    if (freeGames==9) {
-      alert("Se terminaron los juegos gratis!");
-      freeGames=0;
-      free=false;
-    }
-    console.log("freeGames: "+freeGames);
-  },1000);
-
   if (automatico==1) {
 
     var creditos = parseInt($('#credits').text());
@@ -9363,7 +9410,7 @@ Game.prototype.update = function() {
       $('#credits').text(ec);
       newCredits=ec;
       $.ajax({
-          url: 'http://192.168.1.109:8000/setGame/'+oldCredits+'/'+newCredits+'/',
+          url: 'http://casino.local/setGame/'+oldCredits+'/'+newCredits+'/',
           dataType:'JSON',
           type: 'GET',
           contentType: 'application/json',
@@ -9379,14 +9426,14 @@ Game.prototype.update = function() {
             user :userID,
             val  :ec
         };
-        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://casino.local/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
+                $.get("http://casino.local/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -9476,14 +9523,14 @@ Game.prototype.update = function() {
             user :userID,
             val  :ec
         };
-        $.get("http://192.168.1.109:8000/save_credits/"+datos.user+"/"+datos.val, function (data){
+        $.get("http://casino.local/save_credits/"+datos.user+"/"+datos.val, function (data){
               //alert("Guardado exitoso");
               monto_max = data.monto_max;
               
 
               if (datos.val > monto_max) {
                 alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                $.get("http://192.168.1.109:8000/close_sesion/" + device +"/", function () {
+                $.get("http://casino.local/close_sesion/" + device +"/", function () {
                     window.history.back();
                 }).fail(function () {
                 });
@@ -9534,13 +9581,7 @@ Game.prototype.draw = function( force ) {
 
     if (this[offsetp] + DRAW_OFFSET > 0) {
         // reset back to beginning
-        this[offsetp] = -this.resetOffset + SLOT_HEIGHT *$('#back').click(function(){
-      window.history.back();
-    });
-
-    $('#reload').click(function(){
-      window.location.reload();
-    }); 5;
+        this[offsetp] = -this.resetOffset + SLOT_HEIGHT * 5;
     }
 
       } else {
