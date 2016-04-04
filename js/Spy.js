@@ -1121,12 +1121,23 @@ function SlotGame(idUser) {
         if (creditos < apuesta) {
           $('#messages').text('Necesita tener más creditos para apostar');
         }else {
+          $('.noWinImg1').css("visibility","hidden");
+          $('#canvas1').css("visibility","visible");
+          $('.noWinImg2').css("visibility","hidden");
+          $('#canvas2').css("visibility","visible");
+          $('.noWinImg3').css("visibility","hidden");
+          $('#canvas3').css("visibility","visible");
+          $('.noWinImg4').css("visibility","hidden");
+          $('#canvas4').css("visibility","visible");
+          $('.noWinImg5').css("visibility","hidden");
+          $('#canvas5').css("visibility","visible");
           $('#auto').text("Detener");
           automatico = 1;
           correrJuego();
         } 
       }else{
-        $('#auto').text("Automatico");
+        $('#auto').text("Auto");
+        $('#play').text("Jugar")
         automatico = 0;
         playing=true;
       }
@@ -1624,9 +1635,9 @@ Game.prototype.restart = function() {
 
     // function locates id from items
     function _find( items, id ) {
-  for ( var i=0; i < items.length; i++ ) {
-      if ( items[i].id == id ) return i;
-  }
+      for ( var i=0; i < items.length; i++ ) {
+          if ( items[i].id == id ) return i;
+      }
     }
 
     // uncomment to get always jackpot
@@ -1919,7 +1930,7 @@ Game.prototype.update = function() {
         if (percent) {
 
           for (var i = 1; i <= $('#lineas').text(); i++) {
-            if (i == 1 && linesToWin <= 3) {
+            if (i == 1/* && linesToWin <= 3*/) {
               if (that.items1[that.result1].id == '1q')
                 valMatrix[0][0] += 1;
               if (that.items2[that.result2].id == '1q')
@@ -2543,7 +2554,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 2 && linesToWin <= 3) {
+            } else if (i == 2/* && linesToWin <= 3*/) {
               if (that.items1[that.result10].id == '1q')
                 valMatrix[0][1] += 1;
               if (that.items2[that.result20].id == '1q')
@@ -3167,7 +3178,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 3 && linesToWin <= 3) {
+            } else if (i == 3/* && linesToWin <= 3*/) {
               if (that.items1[that.result13].id == '1q')
                 valMatrix[0][2] += 1;
               if (that.items2[that.result23].id == '1q')
@@ -3791,7 +3802,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 4 && linesToWin <= 3) {
+            } else if (i == 4/* && linesToWin <= 3*/) {
               if (that.items1[that.result10].id == '1q')
                 valMatrix[0][3] += 1;
               if (that.items2[that.result2].id == '1q')
@@ -4415,7 +4426,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 5 && linesToWin <= 3) {
+            } else if (i == 5/* && linesToWin <= 3*/) {
               if (that.items1[that.result13].id == '1q')
                 valMatrix[0][4] += 1;
               if (that.items2[that.result2].id == '1q')
@@ -5039,7 +5050,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 6 && linesToWin <= 3) {
+            } else if (i == 6/* && linesToWin <= 3*/) {
               if (that.items1[that.result1].id == '1q')
                 valMatrix[0][5] += 1;
               if (that.items2[that.result23].id == '1q')
@@ -5663,7 +5674,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 7 && linesToWin <= 3) {
+            } else if (i == 7/* && linesToWin <= 3*/) {
               if (that.items1[that.result1].id == '1q')
                 valMatrix[0][6] += 1;
               if (that.items2[that.result20].id == '1q')
@@ -6287,7 +6298,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 8 && linesToWin <= 3) {
+            } else if (i == 8/* && linesToWin <= 3*/) {
               if (that.items1[that.result13].id == '1q')
                 valMatrix[0][7] += 1;
               if (that.items2[that.result23].id == '1q')
@@ -6911,7 +6922,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 9 && linesToWin <= 3) {
+            } else if (i == 9/* && linesToWin <= 3*/) {
               if (that.items1[that.result10].id == '1q')
                 valMatrix[0][8] += 1;
               if (that.items2[that.result20].id == '1q')
@@ -7535,7 +7546,7 @@ Game.prototype.update = function() {
                 ec += parseInt($('#indi5x').text()) * parseInt($('#bet').text());
                 linesToWin += 1;
               }
-            } else if (i == 10 && linesToWin <= 3) {
+            } else if (i == 10/* && linesToWin <= 3*/) {
               if (that.items1[that.result13].id == '1q')
                 valMatrix[0][9] += 1;
               if (that.items2[that.result2].id == '1q')
@@ -8162,7 +8173,7 @@ Game.prototype.update = function() {
             }
           }
 
-
+        
           console.log("Credits:    " + ec);
           $('#messages').text("Usted gano: " + ec + " creditos");
 
@@ -8179,10 +8190,12 @@ Game.prototype.update = function() {
           if (that.items5[that.result50].id == 'book' || that.items5[that.result5].id == 'book' || that.items5[that.result53].id == 'book')
             books += 1;
 
+        
+
           console.log(free);
           controlImg = 0;
 
-          if ((books == 4) && !free) {
+          if ((books >= 4) && !free) {
 
             freeGames = 0;
             //$('div.win').children().css("visibility","hidden");
@@ -8233,19 +8246,23 @@ Game.prototype.update = function() {
             console.log("AQUI CONI");
             playing = false;
           }
+        }
+
+            console.log("FREEGAMES: " + freeGames);
 
           setTimeout(function () {
+
 
             if (free && freeGames != -1)
               freeGames += 1;
             if (freeGames == -1)
               freeGames = 0;
-            if (free && controlImg >= 3 && freeGames > 0) {
+            if (free && controlImg >= 3 && freeGames > 0 && percent) {
               playing = true;
               $('div.win').children().css("visibility", "hidden");
               $('div#lines').children().css("visibility", "hidden");
               $('#sombra').css("visibility", "visible");
-              noWinImages();
+              /*noWinImages();
               $('.noWinImg1').css("visibility", "hidden");
               $('#canvas1').css("visibility", "visible");
               $('.noWinImg2').css("visibility", "hidden");
@@ -8255,7 +8272,7 @@ Game.prototype.update = function() {
               $('.noWinImg4').css("visibility", "hidden");
               $('#canvas4').css("visibility", "visible");
               $('.noWinImg5').css("visibility", "hidden");
-              $('#canvas5').css("visibility", "visible");
+              $('#canvas5').css("visibility", "visible");*/
               switch (itemRand) {
                 case 1:
                   console.log(controlImg);
@@ -8305,7 +8322,13 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
+
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -8324,15 +8347,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                          $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -8428,7 +8453,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -8447,15 +8477,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -8551,7 +8583,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -8570,15 +8607,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -8676,7 +8715,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -8695,15 +8739,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -8801,7 +8847,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -8820,15 +8871,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -8926,7 +8979,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -8945,15 +9003,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -9051,7 +9111,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -9070,15 +9135,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -9176,7 +9243,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -9195,15 +9267,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -9301,7 +9375,12 @@ Game.prototype.update = function() {
                     if (ec != 0) {
                       gamble = 0;
                       playing = true;
-                      $('#play').text("Colectar");
+                      if (automatico==1) {
+                        ec += parseInt($('#credits').text());
+                        $('#credits').text(ec);
+                      }else{
+                        $('#play').text("Colectar");
+                      }
                     } else {
                       $('div.button').addClass("button-default");
                       $('div.button').removeClass("button-disable");
@@ -9320,15 +9399,17 @@ Game.prototype.update = function() {
 
 
                         if (datos.val > monto_max) {
-                          alert("Usted supero el monto de ganancia del día, puede pasar a cobrar sus creditos ganados.");
-                          $.get("http://casino.local/close_sesion/" + device + "/", function () {
+                          alert("Usted ha alcanzado el limite de credito por jugada, pase a cobrar.");
+                $.get("http://casino.local/close_credits/" + device +"/", function () {
                             window.history.back();
                           }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                           });
                         }
                         ;
 
                       }).fail(function () {
+                          alert("Disculpe, ocurrio un error de comunicación!"); window.history.back();
                         //alert("Error al guardar");
                       });
                       ec = 0;
@@ -9382,23 +9463,26 @@ Game.prototype.update = function() {
               $('#sombra').css("visibility", "hidden");
 
 
-              if (freeGames == 9) {
-                alert("Se terminaron los juegos gratis!");
-                freeGames = 0;
-                free = false;
-              }
-              console.log("freeGames: " + freeGames);
+              
             }
+            if (freeGames == 11) {
+              alert("Se terminaron los juegos gratis!");
+              freeGames = 0;
+              free = false;
+            }
+            console.log("freeGames: " + freeGames);
           }, 1000);
 
-        }
+        if (!percent) {
+          $('div#lines').children().css("visibility", "hidden");
+        };
   if (automatico==1) {
 
     var creditos = parseInt($('#credits').text());
     var apuesta = parseInt($('#totalBet').text());
     if (creditos < apuesta) {
       $('#messages').text('Necesita tener más creditos para apostar');
-      $('#auto').text("Automatico");
+      $('#auto').text("Auto");
       automatico = 0;
       playing=false;
       ec = 0;
